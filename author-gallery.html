@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Галерея автора Делис — Aestube</title>
+  <link rel="stylesheet" href="assets/styles.css"><script defer src="assets/app.js"></script>
+</head>
+<body data-public="true">
+  <div data-header></div>
+  <main class="container public-layout">
+    <section class="author-profile">
+      <div class="author-profile__top"><img class="author-profile__avatar" src="assets/avatar.jpg" alt="Делис"><div><h1 class="author-profile__name">Делис <span class="pro-badge">PRO</span></h1><p class="author-profile__about">Дистрибьюторская компания косметологических брендов. Обучаем специалистов и делимся результатами проведённых процедур.</p><div class="author-profile__stats"><span>6 подписано · 21 видео · 2 фото</span></div></div></div>
+      <nav class="author-tabs"><a class="author-tab" href="#">Видео</a><a class="author-tab active" href="author-gallery.html">Галерея</a></nav>
+    <div class="author-gallery-panel">
+      <div class="author-gallery-grid">
+      <button class="gallery-thumb" data-gallery-open data-type="pair" data-before="assets/before.webp" data-after="assets/after.webp" data-title="Коррекция средней трети лица. Результат через 14 дней после процедуры." data-description="Результат через 14 дней после процедуры."><span class="gallery-thumb__media gallery-thumb__media--pair"><img src="assets/before.webp" alt="Было"><img src="assets/after.webp" alt="Стало"></span><span class="gallery-thumb__body"><span class="gallery-thumb__type">Было-стало</span></span></button>
+      <button class="gallery-thumb" data-gallery-open data-type="single" data-image="assets/gallery-single.webp" data-title="Результат процедуры" data-description="Результат проведённой процедуры."><span class="gallery-thumb__media"><img src="assets/gallery-single.webp" alt="Результат процедуры"></span><span class="gallery-thumb__body"><span class="gallery-thumb__type" style="background:rgba(16,35,63,.85)">ФОТО</span></span></button>
+      </div>
+    </div>
+    </section>
+  </main>
+
+  <div class="gallery-modal" data-gallery-modal aria-hidden="true">
+    <button class="gallery-modal__backdrop" data-gallery-close aria-label="Закрыть"></button>
+    <div class="gallery-modal__dialog" role="dialog" aria-modal="true" aria-label="Просмотр галереи">
+      <div class="gallery-modal__media">
+        <button class="gallery-modal__close" data-gallery-close aria-label="Закрыть"><svg class="icon" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        <button class="gallery-modal__nav gallery-modal__nav--prev" data-gallery-prev aria-label="Предыдущее изображение"><svg class="icon" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button class="gallery-modal__nav gallery-modal__nav--next" data-gallery-next aria-label="Следующее изображение"><svg class="icon" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+        <img class="gallery-modal__single" data-view-single alt="Работа автора" hidden>
+        <div class="comparison" data-view-comparison hidden>
+          <img data-before-image alt="Было"><img class="comparison__after" data-after-image alt="Стало">
+          <div class="comparison-caption" data-comparison-caption hidden><span>Было</span><span>Стало</span></div>
+          <span class="comparison__handle"></span><input class="comparison__range" type="range" min="0" max="100" value="50" data-compare-slider aria-label="Сравнение Было и Стало">
+        </div>
+      </div>
+      <div class="gallery-modal__info"><div><h3 data-view-title></h3></div><span class="gallery-modal__count" data-view-count></span></div>
+    </div>
+  </div>
+  <div data-footer></div>
+</body>
+</html>

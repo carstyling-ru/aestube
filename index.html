@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Плейлисты — Aestube</title>
+  <link rel="stylesheet" href="assets/styles.css"><script defer src="assets/app.js"></script>
+</head>
+<body data-active="playlists">
+  <div data-header></div>
+  <main class="container layout">
+    <aside data-sidebar></aside>
+    <section class="content">
+      <div class="page-head page-head--plain">
+        <div><h1 class="page-head__title">Плейлисты</h1></div>
+        <div class="page-head__actions"><a class="button button--primary" href="edit.html"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Создать плейлист</a></div>
+      </div>
+
+      <div class="tabs" data-playlist-tabs><button class="tab active" data-tab data-filter="all">Все <b>4</b></button><button class="tab" data-tab data-filter="public">Открытые <b>1</b></button><button class="tab" data-tab data-filter="private">Закрытые <b>2</b></button><button class="tab" data-tab data-filter="shared">Доступные мне <b>1</b></button></div>
+
+      <div class="playlist-grid">
+        <article class="playlist-card" data-playlist-card data-type="private">
+          <div class="playlist-card__visual">
+            <img src="assets/video-1.jpg" alt=""><div class="playlist-card__stack"><img src="assets/video-2.jpg" alt=""><img src="assets/video-3.jpg" alt=""></div><div class="playlist-card__shade"></div>
+            <span class="access-badge access-badge--private"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>По приглашению</span><span class="playlist-card__count">8 видео</span>
+          </div>
+          <div class="playlist-card__body"><h2 class="playlist-card__title">Продвинутые техники контурной пластики</h2><p class="playlist-card__desc">Закрытый обучающий курс: от анатомии до разбора сложных клинических случаев.</p><div class="playlist-card__footer"><span class="playlist-card__status">18 участников · обновлён сегодня</span><div class="playlist-card__actions"><a class="button button--secondary button--small" href="edit.html">Изменить</a></div></div></div>
+        </article>
+
+        <article class="playlist-card" data-playlist-card data-type="public">
+          <a class="playlist-card__visual" href="playlist-open.html">
+            <img src="assets/video-4.jpg" alt=""><div class="playlist-card__stack"><img src="assets/video-1.jpg" alt=""><img src="assets/video-2.jpg" alt=""></div><div class="playlist-card__shade"></div>
+            <span class="access-badge access-badge--public"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Открытый плейлист</span><span class="playlist-card__count">12 видео</span>
+          </a>
+          <div class="playlist-card__body"><h2 class="playlist-card__title">Основы аппаратной косметологии</h2><p class="playlist-card__desc">Базовые протоколы и обзор оборудования для начинающих специалистов.</p><div class="playlist-card__footer"><span class="playlist-card__status">246 просмотров · обновлён 18 июня</span><div class="playlist-card__actions"><a class="button button--secondary button--small" href="edit.html">Изменить</a></div></div></div>
+        </article>
+
+        <article class="playlist-card" data-playlist-card data-type="private">
+          <div class="playlist-card__visual">
+            <img src="assets/video-3.jpg" alt=""><div class="playlist-card__stack"><img src="assets/video-4.jpg" alt=""><img src="assets/video-2.jpg" alt=""></div><div class="playlist-card__shade"></div>
+            <span class="access-badge access-badge--private"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>По приглашению</span><span class="playlist-card__count">5 видео</span>
+          </div>
+          <div class="playlist-card__body"><h2 class="playlist-card__title">Авторский курс: ботулинотерапия</h2><p class="playlist-card__desc">Материалы для участников очного интенсива, доступ по списку e-mail.</p><div class="playlist-card__footer"><span class="playlist-card__status">19 участников · ссылка до 30 июня</span><div class="playlist-card__actions"><a class="button button--secondary button--small" href="edit.html">Изменить</a></div></div></div>
+        </article>
+
+        <article class="playlist-card" data-playlist-card data-type="shared">
+          <a class="playlist-card__visual" href="playlist.html">
+            <img src="assets/video-2.jpg" alt=""><div class="playlist-card__stack"><img src="assets/video-3.jpg" alt=""><img src="assets/video-4.jpg" alt=""></div><div class="playlist-card__shade"></div>
+            <span class="access-badge access-badge--shared"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Доступен мне</span><span class="playlist-card__count">3 видео</span>
+          </a>
+          <div class="playlist-card__body"><h2 class="playlist-card__title">Разборы случаев: пилинги</h2><p class="playlist-card__desc">Короткая подборка клинических разборов и восстановительных протоколов.</p><div class="playlist-card__footer"><span class="playlist-card__status">Мария Котова · доступ по приглашению</span></div></div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <div data-footer></div>
+</body>
+</html>

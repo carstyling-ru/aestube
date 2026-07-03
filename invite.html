@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Приглашения — Aestube</title>
+  <link rel="stylesheet" href="assets/styles.css"><script defer src="assets/app.js"></script>
+</head>
+<body data-active="playlists">
+  <div data-header></div>
+  <main class="container layout">
+    <aside data-sidebar></aside>
+    <section class="content">
+      <div class="breadcrumbs"><a href="index.html">Плейлисты</a><span>›</span><span>Приглашения</span></div>
+      <div class="page-head"><div><h1 class="page-head__title">Приглашения</h1><div class="page-head__meta">Продвинутые техники контурной пластики</div></div><div class="page-head__actions"><a class="button button--outline" href="edit.html">Редактировать плейлист</a><a class="button button--primary" href="invite-accept.html">Предпросмотр приглашения</a></div></div>
+
+      <section class="panel">
+        <div class="panel__head"><span class="panel__step">1</span><div><h2 class="panel__title">Ссылка-приглашение</h2><p class="panel__subtitle">Создайте ссылку, задайте срок действия и отправьте её вручную.</p></div></div>
+        <div class="link-builder">
+          <div class="field"><label for="life">Срок действия</label><select id="life"><option>24 часа</option><option selected>7 дней</option><option>30 дней</option><option>Выбрать дату и время…</option></select></div>
+          <div class="field"><label for="activations">Количество активаций</label><select id="activations"><option selected>Не ограничено</option><option>1 пользователь</option><option>10 пользователей</option><option>50 пользователей</option></select></div>
+          <button class="button button--primary" style="align-self:end" data-toast="Новая ссылка создана">Создать ссылку</button>
+        </div>
+        <div style="height:14px"></div>
+        <div class="link-box"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><code id="invite-url">https://aestube.ru/invite/pl_87a4c2f9</code><button class="button button--outline button--small" data-copy="#invite-url">Скопировать</button><button class="button button--danger button--small" data-toast="Ссылка отозвана">Отозвать</button></div>
+        <p class="field__hint">Активна до 30 июня 2026, 23:59 · Активировали 18 пользователей</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel__head"><span class="panel__step">2</span><div><h2 class="panel__title">Пригласить по e-mail</h2><p class="panel__subtitle">Адресаты получат письмо со ссылкой. Отправка доступна только для адресов из разрешённого списка.</p></div></div>
+        <div class="email-composer">
+          <div class="form-grid">
+            <div class="field field--wide"><label>Получатели</label><div class="tags-input"><span class="email-tag">maria@example.com <button>×</button></span><span class="email-tag">doctor@clinic.ru <button>×</button></span><input placeholder="Введите e-mail и нажмите Enter"></div><span class="field__hint">Можно добавить несколько адресов</span></div>
+            <div class="field field--wide"><label for="message">Сообщение</label><textarea id="message">Приглашаю вас посмотреть закрытый плейлист с материалами курса. Ссылка будет действовать 7 дней.</textarea></div>
+            <div class="field field--wide"><label><input type="checkbox" checked> Добавить адресатов в разрешённый список</label></div>
+            <div class="field field--wide"><button class="button button--primary" data-toast="Приглашения отправлены двум пользователям"><svg class="icon" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>Отправить 2 приглашения</button></div>
+          </div>
+          <div class="email-preview"><div class="email-preview__eyebrow">Предпросмотр письма</div><h3>Делис приглашает вас в закрытый плейлист</h3><p>«Продвинутые техники контурной пластики» · 8 видео</p><p>Приглашаю вас посмотреть закрытый плейлист с материалами курса. Ссылка будет действовать 7 дней.</p><span class="button button--primary button--small">Открыть плейлист</span></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__head"><div><h2 class="panel__title">Участники и приглашения</h2><p class="panel__subtitle">Доступ можно отозвать в любой момент. Пользователь увидит уведомление при следующем открытии плейлиста.</p></div><div style="margin-left:auto"><button class="button button--outline button--small" data-toast="Список участников выгружен">Выгрузить CSV</button></div></div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Пользователь</th><th>Приглашён</th><th>Статус</th><th>Последний просмотр</th><th></th></tr></thead><tbody>
+          <tr><td><div class="person"><span class="person__avatar">МК</span><div><strong>Мария Котова</strong><div class="field__hint">maria@example.com</div></div></div></td><td>23 июня, e-mail</td><td><span class="status status--active">Доступ активен</span></td><td>сегодня, 12:18</td><td><button class="button button--danger button--small" data-toast="Доступ Марии отозван">Отозвать</button></td></tr>
+          <tr><td><div class="person"><span class="person__avatar" style="background:#ad57a2">АС</span><div><strong>Алексей Смирнов</strong><div class="field__hint">doctor@clinic.ru</div></div></div></td><td>22 июня, по ссылке</td><td><span class="status status--active">Доступ активен</span></td><td>вчера, 18:40</td><td><button class="button button--danger button--small" data-toast="Доступ Алексея отозван">Отозвать</button></td></tr>
+          <tr><td><div class="person"><span class="person__avatar" style="background:#64748b">ЕП</span><div><strong>Елена Петрова</strong><div class="field__hint">elena@example.com</div></div></div></td><td>23 июня, e-mail</td><td><span class="status status--waiting">Не активировано</span></td><td>—</td><td><button class="button button--outline button--small" data-toast="Приглашение отправлено повторно">Повторить</button></td></tr>
+          <tr><td><div class="person"><span class="person__avatar" style="background:#94a3b8">ИИ</span><div><strong>Истёкшая ссылка</strong><div class="field__hint">5 активаций</div></div></div></td><td>1 июня, по ссылке</td><td><span class="status status--expired">Срок истёк</span></td><td>10 июня</td><td><button class="button button--outline button--small" data-toast="Создана новая ссылка">Обновить</button></td></tr>
+        </tbody></table></div>
+      </section>
+    </section>
+  </main>
+  <div data-footer></div>
+</body>
+</html>

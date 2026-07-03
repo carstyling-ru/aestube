@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Галерея — Aestube</title>
+  <link rel="stylesheet" href="assets/styles.css"><script defer src="assets/app.js"></script>
+</head>
+<body data-active="gallery">
+  <div data-header></div>
+  <main class="container layout">
+    <aside data-sidebar></aside>
+    <section class="content">
+      <div class="page-head">
+        <div><h1 class="page-head__title">Галерея</h1><div class="page-head__meta">Покажите результаты вашей работы с помощью одиночных фото или пар «Было—Стало»</div></div>
+        <div class="page-head__actions"><a class="button button--outline" href="author-gallery.html">Посмотреть на странице автора</a></div>
+      </div>
+
+      <section class="panel" data-gallery-upload>
+        <div class="panel__head"><div><h2 class="panel__title">Добавить фотографии</h2></div></div>
+
+        <div class="field field--wide gallery-mode-field">
+          <span class="field__label">Тип публикации</span>
+          <div class="access-options gallery-mode-options">
+            <label class="access-option"><input type="radio" name="gallery-mode" value="single"><span><span class="access-option__title"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/></svg>Одно изображение</span><span class="access-option__text">Обычная фотография, которая откроется целиком в просмотрщике.</span></span></label>
+            <label class="access-option"><input type="radio" name="gallery-mode" value="pair" checked><span><span class="access-option__title"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Пара «Было—Стало»</span><span class="access-option__text">Два кадра одинаковых пропорций для интерактивного сравнения.</span></span></label>
+          </div>
+        </div>
+
+        <div style="height:18px"></div>
+        <div class="gallery-upload-grid">
+          <label class="upload-slot has-file">
+            <input type="file" accept="image/jpeg,image/png,image/webp" data-gallery-file="before">
+            <span class="upload-slot__label">Было</span>
+            <img class="upload-slot__preview" src="assets/before.webp" alt="Предпросмотр изображения Было">
+            <span class="upload-slot__placeholder"><span class="upload-slot__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5 5 5M5 20h14"/></svg></span><strong class="upload-slot__title">Заменить изображение</strong><span class="upload-slot__hint" data-file-dimensions>1169 × 578 px · 0,05 МБ</span><span class="file-error" data-file-error></span></span>
+          </label>
+          <label class="upload-slot has-file" data-after-slot>
+            <input type="file" accept="image/jpeg,image/png,image/webp" data-gallery-file="after">
+            <span class="upload-slot__label">Стало</span>
+            <img class="upload-slot__preview" src="assets/after.webp" alt="Предпросмотр изображения Стало">
+            <span class="upload-slot__placeholder"><span class="upload-slot__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5 5 5M5 20h14"/></svg></span><strong class="upload-slot__title">Заменить изображение</strong><span class="upload-slot__hint" data-file-dimensions>1169 × 577 px · 0,04 МБ</span><span class="file-error" data-file-error></span></span>
+          </label>
+        </div>
+        <div class="validation validation--success" data-pair-status><svg class="icon" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg><span>Пропорции совместимы: разница менее 1%. Пара готова к публикации.</span></div>
+
+        <div class="upload-rules">
+          <div class="upload-rule"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m21 15-5-5L5 20"/></svg><span><strong>Формат</strong><br>JPG, PNG или WebP</span></div>
+          <div class="upload-rule"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><strong>Размер файла</strong><br>Не более 10 МБ</span></div>
+          <div class="upload-rule"><svg class="icon" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg><span><strong>Автомасштабирование</strong><br>Сторона больше 2560 px будет уменьшена</span></div>
+        </div>
+
+        <div style="height:18px"></div>
+        <div class="form-grid">
+          <div class="field field--wide"><div class="description-head"><label for="gallery-description">Описание</label><span class="char-count" data-description-count>0 / 200</span></div><textarea id="gallery-description" maxlength="200" data-description>Коррекция средней трети лица. Результат через 14 дней после процедуры.</textarea><span class="field__hint">Описание появится под фотографией в галерее автора.</span></div>
+        </div>
+        <div class="form-actions gallery-form-actions"><button class="button button--secondary" data-toast="Поля очищены">Очистить</button><button class="button button--primary" data-toast="Публикация добавлена в галерею">Опубликовать в галерее</button></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__head"><div><h2 class="panel__title">Опубликованные фото (2)</h2></div></div>
+        <div class="gallery-manage-list">
+          <article class="gallery-manage-card"><div class="gallery-manage-card__media gallery-manage-card__media--pair"><img src="assets/before.webp" alt="Было"><img src="assets/after.webp" alt="Стало"><span class="gallery-manage-card__label">Было-стало</span></div><div class="gallery-manage-card__body"><p class="gallery-manage-card__desc">Коррекция средней трети лица. Результат через 14 дней после процедуры.</p><div class="gallery-manage-card__footer"><span class="gallery-manage-card__meta"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4c4.927 0 9.095 3.238 10.496 7.7a1 1 0 0 1 0 .6C21.095 16.762 16.926 20 12 20c-4.927 0-9.095-3.238-10.496-7.7a1 1 0 0 1 0-.6C2.905 7.238 7.074 4 12 4Zm0 2a9.004 9.004 0 0 0-8.487 6 9.004 9.004 0 0 0 16.974 0A9.003 9.003 0 0 0 12 6Zm2 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0Zm2 0a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" fill="currentcolor"/></svg><span>24</span><span>· 3 месяца назад</span></span><div class="gallery-manage-card__actions"><button class="button button--icon button--outline" data-toast="Редактирование открыто"><svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg></button><button class="button button--icon button--danger" data-toast="Публикация удалена"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v6M14 11v6"/></svg></button></div></div></div></article>
+          <article class="gallery-manage-card"><div class="gallery-manage-card__media"><img src="assets/gallery-single.webp" alt="Результат процедуры"><span class="gallery-manage-card__label gallery-manage-card__label--photo">ФОТО</span></div><div class="gallery-manage-card__body"><p class="gallery-manage-card__desc">Результат проведённой процедуры.</p><div class="gallery-manage-card__footer"><span class="gallery-manage-card__meta"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4c4.927 0 9.095 3.238 10.496 7.7a1 1 0 0 1 0 .6C21.095 16.762 16.926 20 12 20c-4.927 0-9.095-3.238-10.496-7.7a1 1 0 0 1 0-.6C2.905 7.238 7.074 4 12 4Zm0 2a9.004 9.004 0 0 0-8.487 6 9.004 9.004 0 0 0 16.974 0A9.003 9.003 0 0 0 12 6Zm2 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0Zm2 0a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" fill="currentcolor"/></svg><span>11</span><span>· 3 месяца назад</span></span><div class="gallery-manage-card__actions"><button class="button button--icon button--outline" data-toast="Редактирование открыто"><svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg></button><button class="button button--icon button--danger" data-toast="Публикация удалена"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v6M14 11v6"/></svg></button></div></div></div></article>
+        </div>
+      </section>
+    </section>
+  </main>
+  <div data-footer></div>
+</body>
+</html>

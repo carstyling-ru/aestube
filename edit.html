@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Редактирование плейлиста — Aestube</title>
+  <link rel="stylesheet" href="assets/styles.css"><script defer src="assets/app.js"></script>
+</head>
+<body data-active="playlists">
+  <div data-header></div>
+  <main class="container layout">
+    <aside data-sidebar></aside>
+    <section class="content">
+      <div class="breadcrumbs"><a href="index.html">Плейлисты</a><span>›</span><span>Редактирование</span></div>
+      <div class="page-head"><div><h1 class="page-head__title">Настройка плейлиста</h1></div><div class="page-head__actions"><a class="button button--outline" href="playlist.html">Предпросмотр</a></div></div>
+
+      <section class="panel">
+        <div class="panel__head"><div><h2 class="panel__title">Основная информация</h2></div></div>
+        <div class="form-grid">
+          <div class="field field--wide"><label for="title">Название плейлиста</label><input id="title" value="Продвинутые техники контурной пластики"><span class="field__hint">До 100 символов</span></div>
+          <div class="field field--wide"><label for="description">Описание</label><textarea id="description">Закрытый обучающий курс: от анатомии до разбора сложных клинических случаев. Материалы дополняются после каждого практического модуля.</textarea></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__head"><div><h2 class="panel__title">Доступ к плейлисту</h2><p class="panel__subtitle">Тип доступа можно изменить позднее. Уже выданные приглашения при закрытии сохранятся.</p></div></div>
+        <div class="access-options">
+          <label class="access-option"><input type="radio" name="access" value="public"><span><span class="access-option__title"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Открытый</span><span class="access-option__text">Виден в вашем профиле, поиске и рекомендациях. Доступен всем пользователям сайта.</span></span></label>
+          <label class="access-option"><input type="radio" name="access" value="private" checked><span><span class="access-option__title"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Закрытый</span><span class="access-option__text">Не виден в каталоге и профиле. Открывается авторизованным пользователям по приглашению.</span></span></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__head"><div><h2 class="panel__title">Видео в плейлисте</h2><p class="panel__subtitle">Меняйте порядок перетаскиванием. Закрытые видео доступны только внутри этого плейлиста.</p></div><button class="button button--primary button--small" style="margin-left:auto" data-toast="Окно выбора видео показано в прототипе"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Добавить видео</button></div>
+        <div class="video-list">
+          <div class="video-row"><span class="drag-handle"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="currentColor"/><circle cx="15" cy="6" r="1" fill="currentColor"/><circle cx="9" cy="12" r="1" fill="currentColor"/><circle cx="15" cy="12" r="1" fill="currentColor"/><circle cx="9" cy="18" r="1" fill="currentColor"/><circle cx="15" cy="18" r="1" fill="currentColor"/></svg></span><div class="video-row__thumb"><img src="assets/video-1.jpg" alt=""><span class="video-row__duration">42:18</span></div><div><div class="video-row__title">Анатомические ориентиры средней трети лица</div><div class="video-row__meta">Опубликовано · 1 240 просмотров</div></div><button class="button button--icon button--outline" data-toast="Видео исключено из макета"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v6M14 11v6"/></svg></button></div>
+          <div class="video-row"><span class="drag-handle"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="currentColor"/><circle cx="15" cy="6" r="1" fill="currentColor"/><circle cx="9" cy="12" r="1" fill="currentColor"/><circle cx="15" cy="12" r="1" fill="currentColor"/><circle cx="9" cy="18" r="1" fill="currentColor"/><circle cx="15" cy="18" r="1" fill="currentColor"/></svg></span><div class="video-row__thumb"><img src="assets/video-2.jpg" alt=""><span class="video-row__duration">36:04</span></div><div><div class="video-row__title">Туннельно-ретроградная техника: постановка руки</div><div class="video-row__meta">Только в плейлисте · 18 участников</div></div><button class="button button--icon button--outline" data-toast="Видео исключено из макета"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v6M14 11v6"/></svg></button></div>
+          <div class="video-row"><span class="drag-handle"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="currentColor"/><circle cx="15" cy="6" r="1" fill="currentColor"/><circle cx="9" cy="12" r="1" fill="currentColor"/><circle cx="15" cy="12" r="1" fill="currentColor"/><circle cx="9" cy="18" r="1" fill="currentColor"/><circle cx="15" cy="18" r="1" fill="currentColor"/></svg></span><div class="video-row__thumb"><img src="assets/video-3.jpg" alt=""><span class="video-row__duration">51:27</span></div><div><div class="video-row__title">Разбор осложнений и алгоритм коррекции</div><div class="video-row__meta">Только в плейлисте · 18 участников</div></div><button class="button button--icon button--outline" data-toast="Видео исключено из макета"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v6M14 11v6"/></svg></button></div>
+        </div>
+      </section>
+
+      <section class="panel" id="invite-link" data-private-only>
+        <div class="panel__head"><div><h2 class="panel__title">Ссылка-приглашение</h2><p class="panel__subtitle">Создайте ссылку, задайте срок действия и отправьте её вручную.</p></div></div>
+        <div class="link-builder">
+          <div class="field"><label for="life">Срок действия</label><select id="life"><option>24 часа</option><option selected>7 дней</option><option>30 дней</option><option>Выбрать дату и время…</option></select></div>
+          <button class="button button--primary" style="align-self:end" data-toast="Новая ссылка создана">Создать ссылку</button>
+        </div>
+        <div style="height:14px"></div>
+        <div class="link-box"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><code id="invite-url">https://aestube.ru/invite/pl_87a4c2f9</code><button class="button button--outline button--small" data-copy="#invite-url">Скопировать</button><button class="button button--danger button--small" data-toast="Ссылка отозвана">Отозвать</button></div>
+        <p class="field__hint">Активна до 30 июня 2026, 23:59 · Активировали 18 пользователей</p>
+        <div class="panel-divider"></div>
+        <label class="access-option access-option--plain invite-email-limit"><input type="checkbox" checked><span><span class="access-option__title">Ограничить приглашения списком e-mail</span><span class="access-option__text">Даже с действующей ссылкой доступ получат только адресаты из разрешённого списка.</span></span></label>
+        <div class="email-composer">
+          <div class="form-grid">
+            <div class="field field--wide"><label>Получатели</label><div class="tags-input"><span class="email-tag">maria@example.com <button>×</button></span><span class="email-tag">doctor@clinic.ru <button>×</button></span><input placeholder="Введите e-mail и нажмите Enter"></div><span class="field__hint">Можно добавить несколько адресов</span></div>
+            <div class="field field--wide"><label for="message">Сообщение</label><textarea id="message">Приглашаю вас посмотреть закрытый плейлист с материалами курса. Ссылка будет действовать 7 дней.</textarea></div>
+            <div class="field field--wide"><label><input type="checkbox" checked> Добавить адресатов в разрешённый список</label></div>
+            <div class="field field--wide"><button class="button button--primary" data-toast="Приглашения отправлены двум пользователям"><svg class="icon" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>Отправить 2 приглашения</button></div>
+          </div>
+          <div class="email-preview"><div class="email-preview__eyebrow">Предпросмотр письма</div><h3>Делис приглашает вас в закрытый плейлист</h3><p>«Продвинутые техники контурной пластики» · 8 видео</p><p>Приглашаю вас посмотреть закрытый плейлист с материалами курса. Ссылка будет действовать 7 дней.</p><span class="button button--primary button--small">Открыть плейлист</span></div>
+        </div>
+      </section>
+
+      <section class="panel" data-private-only>
+        <div class="panel__head"><div><h2 class="panel__title">Участники и приглашения</h2><p class="panel__subtitle">Доступ можно отозвать в любой момент. Пользователь увидит уведомление при следующем открытии плейлиста.</p></div><div style="margin-left:auto"><button class="button button--outline button--small" data-toast="Список участников выгружен">Выгрузить CSV</button></div></div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>Пользователь</th><th>Приглашён</th><th>Статус</th><th>Последний просмотр</th><th></th></tr></thead><tbody>
+          <tr><td><div class="person"><span class="person__avatar">МК</span><div><strong>Мария Котова</strong><div class="field__hint">maria@example.com</div></div></div></td><td>23 июня, e-mail</td><td><span class="status status--active">Доступ активен</span></td><td>сегодня, 12:18</td><td><button class="button button--danger button--small" data-toast="Доступ Марии отозван">Отозвать</button></td></tr>
+          <tr><td><div class="person"><span class="person__avatar" style="background:#ad57a2">АС</span><div><strong>Алексей Смирнов</strong><div class="field__hint">doctor@clinic.ru</div></div></div></td><td>22 июня, по ссылке</td><td><span class="status status--active">Доступ активен</span></td><td>вчера, 18:40</td><td><button class="button button--danger button--small" data-toast="Доступ Алексея отозван">Отозвать</button></td></tr>
+          <tr><td><div class="person"><span class="person__avatar" style="background:#64748b">ЕП</span><div><strong>Елена Петрова</strong><div class="field__hint">elena@example.com</div></div></div></td><td>23 июня, e-mail</td><td><span class="status status--waiting">Не активировано</span></td><td>—</td><td><button class="button button--outline button--small" data-toast="Приглашение отправлено повторно">Повторить</button></td></tr>
+          <tr><td><div class="person"><span class="person__avatar" style="background:#94a3b8">ИИ</span><div><strong>Истёкшая ссылка</strong><div class="field__hint">5 активаций</div></div></div></td><td>1 июня, по ссылке</td><td><span class="status status--expired">Срок истёк</span></td><td>10 июня</td><td><button class="button button--outline button--small" data-toast="Создана новая ссылка">Обновить</button></td></tr>
+        </tbody></table></div>
+      </section>
+
+      <div class="form-actions"><a class="button button--secondary" href="index.html">Отмена</a><a class="button button--primary" href="index.html" data-toast="Настройки плейлиста сохранены">Сохранить изменения</a></div>
+    </section>
+  </main>
+  <div data-footer></div>
+</body>
+</html>
