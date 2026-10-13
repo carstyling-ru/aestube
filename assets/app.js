@@ -61,7 +61,6 @@ function shell() {
     ['playlists', 'list', 'Плейлисты', '4', 'index.html'],
     ['gallery', 'siteImage', 'Галерея', '2', 'gallery.html'],
     ['highlights', 'circleStar', 'Актуальное', '', 'my-highlights.html'],
-    ['collection', 'award', 'Коллекция', '', window.AestubeCommunity?.collectionURL(window.AestubeCommunity.currentAuthor()) || 'collection.html?nickname=delis'],
     ['history', 'siteBookOpen', 'История просмотров', '', '#'],
     ['favorites', 'siteBookmark', 'Избранное', '1', '#'],
     ['subscriptions', 'siteUserGroup', 'Подписки', '0', '#'],
@@ -90,7 +89,7 @@ function shell() {
     el.className = 'sidebar';
     el.innerHTML = `
       <nav class="side-nav">
-        ${nav.map(([id, ic, label, count, href], i) => `${i === 6 ? '<div class="side-nav__divider"></div>' : ''}<a class="${active === id ? 'active' : ''}" href="${href}">${icon(ic)}<span>${label}</span>${count ? `<em class="side-nav__count">${count}</em>` : ''}</a>`).join('')}
+        ${nav.map(([id, ic, label, count, href], i) => `${i === 5 ? '<div class="side-nav__divider"></div>' : ''}<a class="${active === id ? 'active' : ''}" href="${href}">${icon(ic)}<span>${label}</span>${count ? `<em class="side-nav__count">${count}</em>` : ''}</a>`).join('')}
         <div class="side-nav__divider"></div><a href="#">${icon('siteLogout')}<span>Выйти</span></a>
       </nav>`;
   });

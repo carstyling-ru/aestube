@@ -66,11 +66,12 @@
   }
   const identity = a => a.pro && a.nickname ? `nickname=${encodeURIComponent(a.nickname)}` : `author=${encodeURIComponent(a.number)}`;
   const profileURL = a => `author.html?${identity(enrich(a))}`;
-  const collectionURL = a => `collection.html?${identity(enrich(a))}`;
+  const collectionURL = a => `${profileURL(a)}&collection=1`;
   function badge(a, full = false) {
     const kind = enrich(a).type;
     const t = TYPES[kind];
-    return `<span class="cm-type-badge cm-type-badge--${kind}" title="${t.label}" aria-label="${t.label}">${kind==='doctor' ? '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8 3 3 7-7"/></svg>' : ''}${full ? t.label : t.short}</span>`;
+    if(kind==='author')return '';
+    return `<span class="cm-type-badge cm-type-badge--${kind}" title="${t.label}" aria-label="${t.label}">${t.short}</span>`;
   }
   function awardState(a, award) {
     a=enrich(a);let dates=[];
@@ -83,11 +84,19 @@
   const art = award => `assets/achievements/${award.art}`;
   function profileFeatures(a, isCollection = false) {
     a=enrich(a);const earned=earnedAwards(a);
-    return `${a.nickname ? `<p class="cm-nickname">@${escape(a.nickname)}</p>` : ''}${!isCollection && earned.length ? `<div class="cm-profile-awards"><span class="cm-profile-awards__label">Достижения</span><div class="cm-profile-awards__items">${earned.slice(0,4).map(item=>`<button class="cm-mini-award" type="button" data-achievement="${item.id}" data-award-author="${a.id}" aria-label="${escape(item.name)}" title="${escape(item.name)}"><img src="${art(item)}" alt="">${awardState(a,item).count>1 ? `<span>${awardState(a,item).count}</span>` : ''}</button>`).join('')}<a class="cm-more-awards" href="${collectionURL(a)}">${earned.length>4 ? `Ещё ${earned.length-4}` : 'Коллекция'} ›</a></div></div>` : ''}`;
+    return `${a.nickname ? `<p class="cm-nickname">@${escape(a.nickname)}</p>` : ''}${!isCollection && earned.length ? `<div class="cm-profile-awards"><span class="cm-profile-awards__label">Достижения</span><div class="cm-profile-awards__items">${earned.slice(0,4).map(item=>`<button class="cm-mini-award" type="button" data-achievement="${item.id}" data-award-author="${a.id}" aria-label="${escape(item.name)}" title="${escape(item.name)}"><img src="${art(item)}" alt="">${awardState(a,item).count>1 ? `<span>${awardState(a,item).count}</span>` : ''}</button>`).join('')}<a class="cm-more-awards" href="${collectionURL(a)}" data-toggle-collection aria-expanded="false" aria-controls="cm-inline-collection" data-collapsed-label="${earned.length>4 ? `Ещё ${earned.length-4}` : 'Коллекция'} ›">${earned.length>4 ? `Ещё ${earned.length-4}` : 'Коллекция'} ›</a></div></div>${collectionMarkup()}` : ''}`;
+  }
+  function collectionMarkup(){return `<section id="cm-inline-collection" class="cm-collection cm-collection--inline" data-collection-content hidden><div class="cm-collection-head"><div><h2 class="hl-small-title">Коллекция <span class="cm-count" data-collection-count></span></h2><p>История достижений автора на Aestube</p></div><button class="button button--secondary" type="button" data-share-collection>Поделиться коллекцией</button></div><div class="cm-collection-share" data-collection-share hidden><label>Ссылка на коллекцию<input readonly aria-label="Ссылка на коллекцию"></label><button class="button button--secondary button--small" data-copy-collection type="button">Копировать</button></div><div class="tabs cm-collection-tabs"><button class="tab active" data-collection-filter="earned" type="button">Получено</button><button class="tab" data-collection-filter="all" type="button">Все достижения</button></div><div class="cm-collection-grid" data-collection-grid></div></section>`;}
+  function initProfileCollection(a){
+    const section=$('#cm-inline-collection'),toggle=$('[data-toggle-collection]');if(!section || !toggle)return;
+    function setOpen(open){section.hidden=!open;toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'Свернуть ‹':toggle.dataset.collapsedLabel;}
+    const p=new URLSearchParams(location.search);setOpen(p.get('collection')==='1' || p.has('achievement'));
+    toggle.onclick=e=>{e.preventDefault();setOpen(section.hidden);const url=new URL(location.href);if(section.hidden){url.searchParams.delete('collection');url.searchParams.delete('achievement');}else url.searchParams.set('collection','1');history.replaceState(null,'',url);};
+    renderCollection(a,section);
   }
   function tabs(a, active) {
     const nav=$('[data-profile-tabs]');if(!nav)return;
-    nav.innerHTML=`<a class="author-tab ${active==='author'?'active':''}" href="${profileURL(a)}">Видео</a>${a.id==='delis'?`<a class="author-tab ${active==='gallery'?'active':''}" href="author-gallery.html?${identity(enrich(a))}">Галерея</a>`:''}<a class="author-tab ${active==='collection'?'active':''}" href="${collectionURL(a)}">Коллекция</a>`;
+    nav.innerHTML=`<a class="author-tab ${active==='author'?'active':''}" href="${profileURL(a)}">Видео</a>${a.id==='delis'?`<a class="author-tab ${active==='gallery'?'active':''}" href="author-gallery.html?${identity(enrich(a))}">Галерея</a>`:''}`;
   }
   function ensureDialog() {
     if($('[data-achievement-dialog]'))return;
@@ -121,7 +130,8 @@
     document.body.dataset.awardsBound='true';
     document.addEventListener('click',event=>{const button=event.target.closest('[data-achievement]');if(button)openAward(button.dataset.achievement,button.dataset.awardAuthor);});
   }
-  function renderCollection(a) {
+  function renderCollection(a,root=document) {
+    const $ = selector=>root.querySelector(selector);
     const target=$('[data-collection-grid]');if(!target)return;
     a=enrich(a);let category='earned';
     const earned=earnedAwards(a);$('[data-collection-count]').textContent=earned.length;
@@ -133,7 +143,7 @@
       const visible=awards.filter(item=>category==='all' || awardState(a,item).earned);
       target.innerHTML=visible.length ? visible.map(item=>{const s=awardState(a,item);return `<button class="cm-collectible ${s.earned?'':'is-locked'}" data-achievement="${item.id}" data-award-author="${a.id}" type="button"><span class="cm-collectible__art"><img src="${art(item)}" alt="">${s.count>1?`<b class="cm-award-count">×${s.count}</b>`:''}${!s.earned?'<span class="cm-locked-label">Не получена</span>':''}</span><strong>${item.name}</strong><span>${s.earned ? dateText(s.last) : item.group}</span></button>`;}).join('') : '<p class="cm-empty">Пока нет достижений. Посмотрите все награды и условия их получения.</p>';
     }
-    document.querySelectorAll('[data-collection-filter]').forEach(button=>button.onclick=()=>{category=button.dataset.collectionFilter;document.querySelectorAll('[data-collection-filter]').forEach(b=>b.classList.toggle('active',b===button));render();});
+    root.querySelectorAll('[data-collection-filter]').forEach(button=>button.onclick=()=>{category=button.dataset.collectionFilter;root.querySelectorAll('[data-collection-filter]').forEach(b=>b.classList.toggle('active',b===button));render();});
     render();bindAwards();const id=new URLSearchParams(location.search).get('achievement');if(id)openAward(id,a.id);
   }
   function initFilter(renderCards) {
@@ -172,8 +182,5 @@
     };
     $('[data-copy-profile]').onclick=async()=>{try{await navigator.clipboard.writeText($('[data-nickname-url]').textContent);showToast('Ссылка на профиль скопирована');}catch(_){showToast('Выделите ссылку и скопируйте её вручную');}};
   }
-  window.addEventListener('aestube:profile-updated',()=>{
-    document.querySelectorAll('[data-sidebar] a[href^="collection.html"]').forEach(link=>link.href=collectionURL(currentAuthor()));
-  });
-  window.AestubeCommunity={init:list=>{authors=list;return list.map(enrich);},enrich,findAuthor,fromURL,currentAuthor,profileURL,collectionURL,badge,profileFeatures,tabs,bindAwards,renderCollection,initFilter,initSettings};
+  window.AestubeCommunity={init:list=>{authors=list;return list.map(enrich);},enrich,findAuthor,fromURL,currentAuthor,profileURL,collectionURL,badge,profileFeatures,tabs,bindAwards,renderCollection,initProfileCollection,initFilter,initSettings};
 })();

@@ -76,7 +76,7 @@
     const sorted = [...authors].filter(a => allowedStories().some(s=>s.author === a.id)).sort((a,b) => Number(authorSeen(a.id)) - Number(authorSeen(b.id)) || Math.max(...storiesFor(b.id).map(s=>s.created)) - Math.max(...storiesFor(a.id).map(s=>s.created)));
     target.innerHTML = sorted.length ? sorted.map(a => {
       const items = storiesFor(a.id);
-      return `<a class="hl-avatar-item" href="${viewURL(a)}" aria-label="${esc(a.name)}: ${items.length} ${items.length === 1 ? 'публикация' : 'публикации'}, ${authorSeen(a.id) ? 'просмотрено' : 'не просмотрено'}">${ring(a)}<span class="hl-avatar-item__name">${esc(a.name)}</span>${community.badge(a)}${document.body.dataset.highlightsPage === 'feed' ? `<span class="hl-avatar-item__meta">${items.length} ${items.length === 1 ? 'публикация' : 'публикации'} · ${age(items[0].created)}</span>` : ''}</a>`;
+      return `<a class="hl-avatar-item" href="${viewURL(a)}" aria-label="${esc(a.name)}: ${items.length} ${items.length === 1 ? 'публикация' : 'публикации'}, ${authorSeen(a.id) ? 'просмотрено' : 'не просмотрено'}">${ring(a)}<span class="hl-avatar-item__name">${esc(a.name)}</span>${document.body.dataset.highlightsPage === 'feed' ? `<span class="hl-avatar-item__meta">${items.length} ${items.length === 1 ? 'публикация' : 'публикации'} · ${age(items[0].created)}</span>` : ''}</a>`;
     }).join('') : '<p class="hl-empty">Пока нет актуальных публикаций. Посмотрите закреплённое в профилях авторов.</p>';
     document.querySelectorAll('[data-scroll]').forEach(button => button.onclick = () => target.scrollBy({left:Number(button.dataset.scroll) * target.clientWidth * .8,behavior:'smooth'}));
   }
@@ -135,7 +135,7 @@
     $('[data-author-profile]').innerHTML = `<div class="author-profile__top"><a class="hl-profile-link" href="${storiesFor(a.id).length ? viewURL(a,'pinned') : '#'}" aria-label="Смотреть закреплённое автора">${ring(a,'hl-ring--large')}</a><div><h1 class="author-profile__name">${esc(a.name)} ${community.badge(a,true)} ${a.pro ? '<span class="pro-badge">PRO</span>' : ''}</h1><p class="author-profile__about">${esc(a.about)}</p><div class="author-profile__stats"><span>${a.id === 'delis' ? '6 подписано · 22 видео · 2 фото' : `1 подписано · ${a.videos} видео`}</span></div></div><button class="button button--secondary hl-profile-subscribe" data-subscribe="${a.id}">${state.subscriptions.includes(a.id) ? 'Отписаться' : 'Подписаться'}</button></div>${community.profileFeatures(a,document.body.dataset.highlightsPage==='collection')}`;
     const authorVideos=$('[data-author-videos]');
     if(authorVideos)authorVideos.innerHTML = videos.filter(v=>v.author === a.id).map(videoCard).join('') || videos.slice(4,8).map(v=>videoCard({...v,author:a.id})).join('');
-    renderPins(a.id); subscriptions();community.tabs(a,document.body.dataset.highlightsPage);community.bindAwards();
+    renderPins(a.id); subscriptions();community.tabs(a,document.body.dataset.highlightsPage);community.bindAwards();community.initProfileCollection(a);
     return a;
   }
   function galleryProfile() {
@@ -143,7 +143,7 @@
     if (img) { const link = document.createElement('a'); link.className = 'hl-profile-link'; link.href = viewURL(authors[0],'pinned'); link.setAttribute('aria-label','Смотреть закреплённое Делис'); link.innerHTML = ring(authors[0],'hl-ring--large'); img.replaceWith(link); }
     const name=$('.author-profile__name');if(!name.querySelector('.cm-type-badge'))name.insertAdjacentHTML('beforeend',community.badge(authors[0],true));
     if(!$('[data-gallery-awards]')){const features=document.createElement('div');features.dataset.galleryAwards='';features.innerHTML=community.profileFeatures(authors[0]);$('.author-profile__top').after(features);}
-    community.tabs(authors[0],'gallery');community.bindAwards();
+    community.tabs(authors[0],'gallery');community.bindAwards();community.initProfileCollection(authors[0]);
     renderPins('delis');
   }
   function manage() {
@@ -185,6 +185,24 @@
     el.hidden = !story.text;
     Object.assign(el.style,{fontFamily:fontFamilies[style.font] || fontFamilies.classic,fontSize:`${(style.size || 25) * scale}px`,fontWeight:style.font === 'strong' ? '600' : '400',color:style.color || '#ffffff',background:style.backdrop === false ? 'transparent' : style.background || '#10233f',textAlign:style.align || 'center',left:`${style.x ?? 50}%`,top:`${style.y ?? 72}%`});
   }
+  function initViewerPopup() {
+    if(document.body.dataset.highlightsPage==='viewer')return;
+    let dialog,frame,opener;
+    function close(){if(dialog?.open)dialog.close();}
+    document.addEventListener('click',event=>{
+      const link=event.target.closest('a[href]');if(!link || event.defaultPrevented || event.button!==0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)return;
+      const url=new URL(link.href,location.href);if(url.origin!==location.origin || !url.pathname.endsWith('/highlight-view.html'))return;
+      event.preventDefault();
+      opener=link;
+      if(!dialog){
+        dialog=document.createElement('dialog');dialog.className='hl-view-dialog';dialog.setAttribute('aria-label','Просмотр короткого видео');
+        frame=document.createElement('iframe');frame.title='Просмотр короткого видео';frame.allow='autoplay; fullscreen';dialog.appendChild(frame);document.body.appendChild(dialog);
+        dialog.addEventListener('close',()=>{frame.src='about:blank';document.body.classList.remove('hl-popup-open');if(opener?.isConnected)opener.focus();});
+      }
+      url.searchParams.set('embedded','1');frame.src=url.href;dialog.showModal();document.body.classList.add('hl-popup-open');
+    });
+    window.addEventListener('message',event=>{if(frame && event.source===frame.contentWindow && event.origin===location.origin && event.data?.type==='aestube:close-viewer')close();});
+  }
   async function viewer() {
     const params = new URLSearchParams(location.search);
     const explicit = state.stories.find(s=>s.id === params.get('story'));
@@ -208,13 +226,20 @@
     const image = $('[data-story-image]');
     const pause = $('[data-story-pause]');
     const exitURL = scope === 'feed' ? 'highlights.html' : scope === 'single' ? 'my-highlights.html' : authorURL(authorById(chosen));
+    const embedded=params.get('embedded')==='1' && window.parent!==window;
+    function closeViewer(){if(embedded)window.parent.postMessage({type:'aestube:close-viewer'},location.origin);else location.href=exitURL;}
     $('[data-story-end] a').href = exitURL;
     $('.hl-view-close').href = exitURL;
+    if(embedded){
+      for(const link of [$('.hl-view-close'),$('[data-story-end] a')])link.addEventListener('click',event=>{event.preventDefault();closeViewer();});
+      $('[data-story-end] a').textContent='Закрыть просмотр';
+    }
     if (scope !== 'feed') {
       $('[data-story-end] h2').textContent = scope === 'pinned' ? (queue.length ? 'Закреплённое просмотрено' : 'Нет закреплённых публикаций') : 'Просмотр завершён';
       $('[data-story-end] p').textContent = scope === 'single' ? 'Вы можете вернуться к своим публикациям.' : 'Другие публикации автора доступны в его профиле.';
       $('[data-story-end] a').textContent = scope === 'single' ? 'Вернуться в кабинет' : 'Вернуться в профиль';
     }
+    if(embedded)$('[data-story-end] a').textContent='Закрыть просмотр';
     function markSeen() { const s=queue[index]; if(s && !isSeen(s)) {state.seen.push(s.id);save();} }
     function setPause(value) {
       paused=value; last=performance.now(); pause.textContent=paused ? '▶' : 'Ⅱ'; pause.setAttribute('aria-label',paused ? 'Продолжить' : 'Пауза');
@@ -240,6 +265,7 @@
       pause.textContent='Ⅱ'; pause.setAttribute('aria-label','Пауза');
       $('[data-view-author-avatar]').innerHTML=avatar(a); $('[data-view-author-avatar]').href=authorURL(a);
       $('[data-view-author-name]').textContent=a.name; $('[data-view-author-name]').href=authorURL(a);
+      if(embedded){$('[data-view-author-avatar]').target='_top';$('[data-view-author-name]').target='_top';}
       $('[data-story-age]').textContent=age(s.created); $('[data-story-title]').textContent=s.title;
       $('[data-story-position]').textContent=`${index+1} из ${queue.length} · ${s.duration} сек`;
       const items=queue.filter(x=>x.author === s.author);
@@ -269,7 +295,7 @@
     for (const reaction of ['like','dislike']) $(`[data-story-${reaction}]`).addEventListener('click',()=>{const s=queue[index];if(!s)return;state.reactions[s.id]=state.reactions[s.id] === reaction ? null : reaction;save();reactions();});
     $('[data-comment-toggle]').addEventListener('click',()=>{const panel=$('[data-comment-panel]');panel.hidden=!panel.hidden;setPause(true);if(!panel.hidden)panel.querySelector('input').focus();});
     $('[data-comment-form]').addEventListener('submit',event=>{event.preventDefault();const input=event.currentTarget.querySelector('input'),s=queue[index];if(!input.value.trim() || !s)return;(state.comments[s.id] ||= []).push(input.value.trim());save();input.value='';reactions();});
-    document.addEventListener('keydown',event=>{if(event.target.matches('input,textarea'))return;if(event.key === 'ArrowRight')next();if(event.key === 'ArrowLeft')prev();if(event.code === 'Space') {event.preventDefault();setPause(!paused);}if(event.key === 'Escape')location.href=exitURL;});
+    document.addEventListener('keydown',event=>{if(event.key === 'Escape'){closeViewer();return;}if(event.target.matches('input,textarea'))return;if(event.key === 'ArrowRight')next();if(event.key === 'ArrowLeft')prev();if(event.code === 'Space') {event.preventDefault();setPause(!paused);}});
     document.addEventListener('visibilitychange',()=>{if(document.hidden)setPause(true);});
     video.addEventListener('ended',()=>{if(!finished){markSeen();next();}});
     function tick(now) {
@@ -386,7 +412,7 @@
     if(page === 'feed')feed();
     if(page === 'authors') community.initFilter(list=>{$('[data-authors-list]').innerHTML=list.map(authorCard).join('');subscriptions();});
     if(page === 'author') profile();
-    if(page === 'collection') {const author=profile();if(author)community.renderCollection(author);}
+    if(page === 'collection') {const author=community.fromURL();if(author){const url=new URL(community.collectionURL(author),location.href);const achievement=new URLSearchParams(location.search).get('achievement');if(achievement)url.searchParams.set('achievement',achievement);location.replace(url.href);}else profile();}
     if(page === 'settings')community.initSettings();
     if(page === 'gallery') galleryProfile();
     if(page === 'manage') {
@@ -396,6 +422,7 @@
     }
     if(page === 'create')editor();
     if(page === 'viewer')viewer();
+    initViewerPopup();
   }
   document.addEventListener('DOMContentLoaded', start);
   window.addEventListener('storage', event => {
