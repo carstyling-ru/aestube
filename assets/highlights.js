@@ -358,11 +358,7 @@
     if(document.body.dataset.active) {const nav=document.createElement('nav');nav.className='hl-mobile-nav';nav.innerHTML='<a href="index.html">Плейлисты</a><a href="gallery.html">Галерея</a><a href="my-highlights.html">Актуальное</a>';$('.content')?.prepend(nav);}
     $('.mobile-menu')?.addEventListener('click',()=>$('.header__nav')?.classList.toggle('is-open'));
     if(page === 'home') {feed();home();}
-    if(page === 'feed') {
-      const mode=$('[data-feed-mode]'),period=$('[data-feed-period]');mode.value=state.mode;period.value=state.period;
-      mode.addEventListener('change',()=>{state.mode=mode.value;save();feed();if(state.mode === 'subscriptions' && !state.subscriptions.length)showToast('У вас пока нет подписок — показаны все авторы.');});
-      period.addEventListener('change',()=>{state.period=Number(period.value);save();feed();});feed();
-    }
+    if(page === 'feed')feed();
     if(page === 'authors') {$('[data-authors-list]').innerHTML=authors.map(authorCard).join('');subscriptions();}
     if(page === 'author') profile();
     if(page === 'gallery') galleryProfile();
