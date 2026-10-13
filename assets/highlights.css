@@ -111,7 +111,7 @@ a:hover > .hl-ring { transform: scale(1.04); }
 .hl-trim-track { position: relative; height: 22px; background: repeating-linear-gradient(90deg, #dfe4ea 0 12px, #f1f5f9 12px 14px); margin: 16px 0; border-radius: 5px; }
 .hl-trim-track span { position: absolute; top: 0; bottom: 0; border: 2px solid var(--purple); border-radius: 4px; background: #ad57a226; }
 .hl-form-error { padding: 10px; border-radius: 6px; color: var(--danger); background: #fff3f3; font-size: 12px; }
-.hl-publish { margin-top: 14px; }
+.hl-editor-actions { display: flex; align-items: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
 .hl-view-body { background: #10151f; color: white; }
 .hl-view-header { height: 70px; display: flex; align-items: center; justify-content: flex-end; padding: 18px 30px; }
 .hl-view-close { text-decoration: none; font-size: 24px; }
