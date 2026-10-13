@@ -62,12 +62,26 @@
   }
   function fromURL() {
     const p=new URLSearchParams(location.search);
-    return p.has('nickname') ? findAuthor(p.get('nickname')) : findAuthor(p.get('author') || 'delis');
+    if(p.has('nickname'))return findAuthor(p.get('nickname'));
+    if(p.has('author'))return findAuthor(p.get('author'));
+    const root=new URL('./',document.baseURI).pathname;
+    const path=location.pathname.startsWith(root) ? location.pathname.slice(root.length).replace(/\/$/,'') : '';
+    if(path && !path.includes('/') && !path.endsWith('.html')){try{return findAuthor(decodeURIComponent(path));}catch(_){return undefined;}}
+    return document.body.dataset.authorRoute ? undefined : findAuthor('delis');
   }
+  const siteRoot = () => new URL('./',document.baseURI);
+  const nicknameURL = nick => new URL(encodeURIComponent(nick),siteRoot()).pathname;
   // Existing nicknames remain valid when the visible account badge changes.
   const identity = a => a.nickname ? `nickname=${encodeURIComponent(a.nickname)}` : `author=${encodeURIComponent(a.number)}`;
-  const profileURL = a => `author.html?${identity(enrich(a))}`;
-  const collectionURL = a => `${profileURL(a)}&collection=1`;
+  const profileURL = a => {a=enrich(a);return a.nickname ? nicknameURL(a.nickname) : `${new URL('author.html',siteRoot()).pathname}?author=${encodeURIComponent(a.number)}`;};
+  const collectionURL = a => {const url=profileURL(a);return `${url}${url.includes('?')?'&':'?'}collection=1`;};
+  function normalizeProfileURL(a){
+    const root=siteRoot();
+    let base=document.querySelector('base');if(!base){base=document.createElement('base');document.head.prepend(base);}base.href=root.href;
+    const url=new URL(profileURL(a),root);
+    new URLSearchParams(location.search).forEach((value,key)=>{if(key!=='nickname' && key!=='author')url.searchParams.set(key,value);});
+    if(url.href!==location.href)history.replaceState(null,'',`${url.pathname}${url.search}${location.hash}`);
+  }
   function badge(a, full = false) {
     const kind = enrich(a).type;
     const t = TYPES[kind];
@@ -155,19 +169,19 @@
     const form=$('[data-profile-settings]');if(!form)return;const a=currentAuthor(), input=$('#cm-profile-nickname');
     input.value=a.nickname || '';
     const status=$('[data-nickname-status]');
-    function preview(){const value=input.value.trim().toLowerCase();const url=value?`author.html?nickname=${encodeURIComponent(value)}`:`author.html?author=${a.number}`;$('[data-nickname-url]').textContent=new URL(url,location.href).href;$('[data-open-profile]').href=profileURL(currentAuthor());}
+    function preview(){const value=input.value.trim().toLowerCase();const url=value?nicknameURL(value):`${new URL('author.html',siteRoot()).pathname}?author=${a.number}`;$('[data-nickname-url]').textContent=new URL(url,location.href).href;$('[data-open-profile]').href=profileURL(currentAuthor());}
     input.oninput=()=>{status.textContent='';status.classList.remove('is-error');input.setCustomValidity('');preview();};preview();
     form.onsubmit=e=>{
       e.preventDefault();const nick=input.value.trim().toLowerCase();
       let error='';
       if(!a.pro)error='Никнейм доступен для аккаунтов PRO.';
       else if(nick && !/^[a-z][a-z0-9_-]{2,29}$/.test(nick))error='Используйте от 3 до 30 символов: латинские буквы, цифры, дефис или подчёркивание. Начните с буквы.';
-      else if(nick && (['admin','support','authors','my','aestube','collection','profile'].includes(nick) || authors.map(enrich).some(other=>other.id!==a.id && (other.nickname===nick || other.id===nick))))error='Этот никнейм занят. Выберите другой.';
+      else if(nick && (['admin','support','assets','index','home','author','authors','author-gallery','gallery','edit','invite','invite-accept','playlist','playlist-open','playlist-public','profile-settings','select-video','highlights','my-highlights','highlight-view','highlight-create','my','aestube','collection','profile'].includes(nick) || authors.map(enrich).some(other=>other.id!==a.id && (other.nickname===nick || other.id===nick))))error='Этот никнейм занят. Выберите другой.';
       if(error){status.textContent=error;status.classList.add('is-error');input.focus();return;}
       try {const next={...overrides,[a.id]:{...(overrides[a.id] || {}),nickname:nick}};localStorage.setItem(KEY,JSON.stringify(next));overrides=next;status.classList.remove('is-error');status.textContent='Никнейм сохранён';input.value=nick;preview();window.dispatchEvent(new CustomEvent('aestube:profile-updated'));}
       catch(_){status.textContent='Не удалось сохранить никнейм. Проверьте доступность хранилища браузера.';status.classList.add('is-error');}
     };
     $('[data-copy-profile]').onclick=async()=>{try{await navigator.clipboard.writeText($('[data-nickname-url]').textContent);showToast('Ссылка на профиль скопирована');}catch(_){showToast('Выделите ссылку и скопируйте её вручную');}};
   }
-  window.AestubeCommunity={init:list=>{authors=list;return list.map(enrich);},enrich,findAuthor,fromURL,currentAuthor,profileURL,collectionURL,badge,profileFeatures,tabs,bindAwards,renderCollection,initProfileCollection,initFilter,initSettings};
+  window.AestubeCommunity={init:list=>{authors=list;return list.map(enrich);},enrich,findAuthor,fromURL,currentAuthor,profileURL,collectionURL,normalizeProfileURL,badge,profileFeatures,tabs,bindAwards,renderCollection,initProfileCollection,initFilter,initSettings};
 })();

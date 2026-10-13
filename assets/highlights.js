@@ -131,6 +131,7 @@
   function profile() {
     const a = community.fromURL();
     if (!a) { $('[data-author-profile]').innerHTML='<h1 class="hl-section-title">Автор не найден</h1><p class="cm-empty">Проверьте никнейм или выберите автора из списка.</p><a class="button button--secondary" href="authors.html">Авторы</a>'; document.querySelectorAll('[data-profile-tabs], [data-collection-content]').forEach(el=>el.hidden=true); return; }
+    community.normalizeProfileURL(a);
     document.title = `${a.name} — Aestube`;
     $('[data-author-profile]').innerHTML = `<div class="author-profile__top"><a class="hl-profile-link" href="${storiesFor(a.id).length ? viewURL(a,'pinned') : '#'}" aria-label="Смотреть закреплённое автора">${ring(a,'hl-ring--large')}</a><div><h1 class="author-profile__name">${esc(a.name)} ${community.badge(a,true)} ${a.pro ? '<span class="pro-badge">PRO</span>' : ''}</h1><p class="author-profile__about">${esc(a.about)}</p><div class="author-profile__stats"><span>${a.id === 'delis' ? '6 подписано · 22 видео · 2 фото' : `1 подписано · ${a.videos} видео`}</span></div></div><button class="button button--secondary hl-profile-subscribe" data-subscribe="${a.id}">${state.subscriptions.includes(a.id) ? 'Отписаться' : 'Подписаться'}</button></div>${community.profileFeatures(a,document.body.dataset.highlightsPage==='collection')}`;
     const authorVideos=$('[data-author-videos]');
