@@ -20,8 +20,7 @@ a:hover > .hl-ring { transform: scale(1.04); }
 .hl-ring.is-empty { background: transparent; padding: 0; }
 .hl-ring > img, .hl-avatar-initials { display: grid; place-items: center; width: 100%; height: 100%; object-fit: cover; border: 3px solid white; border-radius: 50%; background: #e9edf3; color: var(--navy); font-size: 18px; font-weight: 600; }
 .hl-ring--large { width: 100px; height: 100px; }
-.hl-feed-note { margin: 16px 0 0; color: var(--muted); font-size: 12px; }
-.hl-feed-toolbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 28px; color: var(--muted); font-size: 13px; }
+.hl-feed-toolbar { display: flex; justify-content: flex-end; align-items: flex-start; gap: 20px; margin-bottom: 28px; color: var(--muted); font-size: 13px; }
 .hl-feed-toolbar p { margin: 0; }
 .hl-feed-settings { position: relative; min-width: 160px; color: var(--navy); }
 .hl-feed-settings summary { cursor: pointer; text-align: right; }

@@ -77,8 +77,6 @@
       const items = storiesFor(a.id);
       return `<a class="hl-avatar-item" href="${viewURL(a)}" aria-label="${esc(a.name)}: ${items.length} ${items.length === 1 ? 'публикация' : 'публикации'}, ${authorSeen(a.id) ? 'просмотрено' : 'не просмотрено'}">${ring(a)}<span class="hl-avatar-item__name">${esc(a.name)}</span>${document.body.dataset.highlightsPage === 'feed' ? `<span class="hl-avatar-item__meta">${items.length} ${items.length === 1 ? 'публикация' : 'публикации'} · ${age(items[0].created)}</span>` : ''}</a>`;
     }).join('') : '<p class="hl-empty">Пока нет актуальных публикаций. Посмотрите закреплённое в профилях авторов.</p>';
-    const note = $('[data-feed-note]');
-    if (note) note.textContent = `${state.mode === 'subscriptions' && state.subscriptions.length ? 'От авторов, на которых вы подписаны' : 'Публикации авторов'} за последние ${periodLabel()} · сначала новые, просмотренные в конце`;
     document.querySelectorAll('[data-scroll]').forEach(button => button.onclick = () => target.scrollBy({left:Number(button.dataset.scroll) * target.clientWidth * .8,behavior:'smooth'}));
   }
   const videos = [
