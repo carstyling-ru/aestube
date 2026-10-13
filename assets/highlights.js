@@ -97,6 +97,11 @@
     const subscribed = state.subscriptions.includes(a.id);
     return `<article class="hl-author-card"><a class="hl-profile-link" href="${storiesFor(a.id).length ? viewURL(a) : authorURL(a)}" aria-label="${esc(a.name)}${storiesFor(a.id).length ? ' — смотреть актуальное' : ''}">${ring(a,'hl-ring--large')}</a><a class="hl-author-card__name" href="${authorURL(a)}">${esc(a.name)}</a><span class="hl-author-card__stats">${a.id === 'delis' ? 6 : 1} подписано · ${a.videos} видео</span><p class="hl-author-card__about">${esc(a.about)}</p>${a.demo ? '<span class="hl-author-card__note">Автор-пример</span>' : ''}<button class="button button--secondary button--small" data-subscribe="${a.id}">${subscribed ? 'Отписаться' : 'Подписаться'}</button></article>`;
   }
+  function homeAuthorCard(a, index) {
+    const hasHighlights = (index === 1 || index === 2) && storiesFor(a.id).length > 0;
+    const authorAvatar = hasHighlights ? ring(a,'hl-ring--large') : `<span class="hl-ring hl-ring--large is-empty">${avatar(a)}</span>`;
+    return `<article class="hl-author-card hl-author-card--horizontal"><a class="hl-profile-link" href="${hasHighlights ? viewURL(a) : authorURL(a)}" aria-label="${esc(a.name)}${hasHighlights ? ' — смотреть актуальное' : ''}">${authorAvatar}</a><div class="hl-author-card__content"><a class="hl-author-card__name" href="${authorURL(a)}">${esc(a.name)}</a><span class="hl-author-card__stats">${a.id === 'delis' ? 6 : 1} подписано · ${a.videos} видео</span><p class="hl-author-card__about">${esc(a.about)}</p></div></article>`;
+  }
   function subscriptions() {
     document.querySelectorAll('[data-subscribe]').forEach(button => button.addEventListener('click', () => {
       const id = button.dataset.subscribe;
@@ -109,7 +114,9 @@
   }
   function home() {
     $('[data-home-sections]').innerHTML = [['Рекомендуемое','recommended',videos.slice(0,4)],['Новое','new',[videos[7],...videos.slice(4,7)]],['Популярное','popular',videos.slice(3,7)],['Лучшее','best',[videos[5],videos[3],videos[4],videos[0]]]].map(([title,id,items]) => `<section class="panel" id="${id}"><div class="hl-section-head"><a class="hl-section-title" href="playlist-open.html">${title} <span>›</span></a></div><div class="hl-video-grid">${items.map(videoCard).join('')}</div></section>`).join('');
-    $('[data-home-authors]').innerHTML = authors.slice(0,4).map(authorCard).join('');
+    const authorList = $('[data-home-authors]');
+    authorList.innerHTML = authors.slice(0,4).map(homeAuthorCard).join('');
+    document.querySelectorAll('[data-authors-scroll]').forEach(button => button.addEventListener('click', () => authorList.scrollBy({left:Number(button.dataset.authorsScroll) * (authorList.clientWidth + 16),behavior:'smooth'})));
     subscriptions();
   }
   function renderPins(id) {
@@ -373,6 +380,7 @@
     try { const updated=JSON.parse(event.newValue); if(updated.version !== 1)return;state=updated; } catch (_) {return;}
     const page=document.body.dataset.highlightsPage;
     if(page === 'home' || page === 'feed')feed();
+    if(page === 'home')$('[data-home-authors]').innerHTML=authors.slice(0,4).map(homeAuthorCard).join('');
     if(page === 'manage')manage();
     if(page === 'author')profile();
     if(page === 'gallery')renderPins('delis');

@@ -50,6 +50,14 @@ a:hover > .hl-ring { transform: scale(1.04); }
 .hl-author-card__about { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.55; }
 .hl-author-card__note { font-size: 11px; color: var(--purple); }
 .hl-author-card .button { margin-top: auto; }
+.hl-author-grid--home { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: calc((100% - 32px) / 3); gap: 16px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x mandatory; }
+.hl-author-grid--home::-webkit-scrollbar { display: none; }
+.hl-author-grid--home .hl-author-card--horizontal { flex-direction: row; align-items: flex-start; gap: 16px; padding: 0; text-align: left; scroll-snap-align: start; }
+.hl-author-card--horizontal .hl-ring--large { width: 96px; height: 96px; }
+.hl-author-card__content { display: grid; gap: 6px; min-width: 0; }
+.hl-author-card--horizontal .hl-author-card__name { font-size: 16px; }
+.hl-author-card--horizontal .hl-author-card__stats { font-size: 14px; line-height: 1.5; }
+.hl-author-card--horizontal .hl-author-card__about { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; font-size: 14px; line-height: 1.5; }
 .hl-categories { display: flex; gap: 12px; flex-wrap: wrap; }
 .hl-categories a { padding: 12px 18px; border-radius: 8px; background: var(--canvas); font-size: 14px; text-decoration: none; }
 .hl-profile-link { display: block; flex: 0 0 auto; text-decoration: none; }
@@ -145,6 +153,7 @@ a:hover > .hl-ring { transform: scale(1.04); }
 @media (max-width: 820px) {
   .hl-feed-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 12px; }
   .hl-author-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hl-author-grid--home { grid-template-columns: none; grid-auto-columns: calc((100% - 16px) / 2); }
   .hl-video-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hl-editor { grid-template-columns: minmax(0, 1fr) 250px; }
   .hl-manage-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -165,6 +174,7 @@ a:hover > .hl-ring { transform: scale(1.04); }
   .hl-video-card__title { font-size: 12px; } .hl-video-card__body > img { display: none; }
   .hl-author-card { padding: 12px 0; }
   .hl-author-card__name { font-size: 13px; }
+  .hl-author-grid--home { grid-auto-columns: 100%; }
   .hl-manage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hl-editor { display: flex; flex-direction: column-reverse; }
   .hl-editor-preview { position: static; width: min(300px, 100%); align-self: center; }
