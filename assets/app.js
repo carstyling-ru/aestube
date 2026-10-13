@@ -2,6 +2,8 @@ const icons = {
   menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
   chevron: '<path d="m9 18 6-6-6-6"/>',
+  chevronLeft: '<path d="m15 18-6-6 6-6"/>',
+  chevronDown: '<path d="m6 9 6 6 6-6"/>',
   home: '<path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/>',
   video: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3Z"/>',
   upload: '<path d="M12 16V4m0 0L7 9m5-5 5 5"/><path d="M5 20h14"/>',
@@ -69,8 +71,11 @@ function shell() {
         <button class="mobile-menu" aria-label="Открыть меню">${icon('menu')}</button>
         <a class="header__logo" href="home.html"><img src="assets/logo.svg" alt="Aestube"></a>
         <label class="header__search">${icon('search')}<input type="search" placeholder="Поиск видео, авторов и плейлистов"></label>
-        <a class="header__user" href="index.html"><img class="avatar" src="assets/avatar.jpg" alt=""><span class="header__user-name">Делис</span><span class="pro-badge">PRO</span></a>
-        <span class="language">RU ${icon('chevron')}</span>
+        <a class="header__user" href="author.html?author=delis" aria-label="Профиль Делис"><img class="avatar" src="assets/avatar.jpg" alt=""><span class="header__user-name">Делис</span><span class="pro-badge">PRO</span>${icon('chevronLeft','header__profile-arrow')}</a>
+        <div class="language" data-language>
+          <button class="language__toggle" type="button" data-language-toggle aria-expanded="false" aria-haspopup="menu" aria-controls="header-language-menu"><span data-language-label>Русский</span>${icon('chevronDown')}</button>
+          <div class="language__menu" id="header-language-menu" role="menu" aria-label="Выберите язык" data-language-menu hidden></div>
+        </div>
       </div>
       <nav class="header__nav">
         <a class="nav-chip" href="highlights.html">Актуальное</a><a class="nav-chip" href="home.html#new">Новое</a><a class="nav-chip" href="home.html#popular">Популярное</a><a class="nav-chip" href="home.html#best">Лучшее</a><a class="nav-chip" href="authors.html">Авторы</a><a class="nav-chip" href="home.html#categories">Категории</a>
@@ -104,6 +109,7 @@ function showToast(text) {
 }
 
 function initInteractions() {
+  initLanguageMenu();
   document.querySelectorAll('[data-toast]').forEach(btn => btn.addEventListener('click', event => {
     if (btn.tagName === 'A' && btn.getAttribute('href') !== '#') return;
     event.preventDefault();
@@ -152,6 +158,51 @@ function initInteractions() {
 
   initGalleryUpload();
   initGalleryViewer();
+}
+
+function initLanguageMenu() {
+  const languages = {ru:'Русский', en:'English', tr:'Türkçe', pt:'Português'};
+  let selected = 'ru';
+  try { selected = localStorage.getItem('aestube-language') || 'ru'; } catch (_) {}
+  if (!languages[selected]) selected = 'ru';
+  document.querySelectorAll('[data-language]').forEach(container => {
+    const toggle = container.querySelector('[data-language-toggle]');
+    const menu = container.querySelector('[data-language-menu]');
+    const label = container.querySelector('[data-language-label]');
+    const setOpen = open => { menu.hidden = !open; toggle.setAttribute('aria-expanded', String(open)); };
+    const render = () => {
+      label.textContent = languages[selected];
+      menu.innerHTML = Object.entries(languages).filter(([code]) => code !== selected).map(([code, name]) => `<button type="button" role="menuitem" data-locale="${code}">${name}</button>`).join('');
+    };
+    render();
+    toggle.addEventListener('click', () => setOpen(menu.hidden));
+    toggle.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+      event.preventDefault(); setOpen(true);
+      const items = [...menu.querySelectorAll('[role="menuitem"]')];
+      items[event.key === 'ArrowDown' ? 0 : items.length - 1]?.focus();
+    });
+    menu.addEventListener('click', event => {
+      const option = event.target.closest('[data-locale]');
+      if (!option) return;
+      selected = option.dataset.locale;
+      try { localStorage.setItem('aestube-language', selected); } catch (_) {}
+      render(); setOpen(false); toggle.focus();
+    });
+    menu.addEventListener('keydown', event => {
+      const items = [...menu.querySelectorAll('[role="menuitem"]')];
+      const current = items.indexOf(document.activeElement);
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault(); items[(current + (event.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length]?.focus();
+      }
+      if (event.key === 'Home' || event.key === 'End') {
+        event.preventDefault(); items[event.key === 'Home' ? 0 : items.length - 1]?.focus();
+      }
+    });
+    container.addEventListener('keydown', event => { if (event.key === 'Escape') { setOpen(false); toggle.focus(); } });
+    document.addEventListener('click', event => { if (!container.contains(event.target)) setOpen(false); });
+    container.addEventListener('focusout', event => { if (!container.contains(event.relatedTarget)) setOpen(false); });
+  });
 }
 
 function initGalleryUpload() {
