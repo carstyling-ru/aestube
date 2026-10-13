@@ -113,8 +113,7 @@ a:hover > .hl-ring { transform: scale(1.04); }
 .hl-form-error { padding: 10px; border-radius: 6px; color: var(--danger); background: #fff3f3; font-size: 12px; }
 .hl-publish { margin-top: 14px; }
 .hl-view-body { background: #10151f; color: white; }
-.hl-view-header { height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 18px 30px; }
-.hl-view-header img { width: 112px; }
+.hl-view-header { height: 70px; display: flex; align-items: center; justify-content: flex-end; padding: 18px 30px; }
 .hl-view-close { text-decoration: none; font-size: 24px; }
 .hl-view-layout { display: flex; justify-content: center; align-items: center; gap: 28px; padding: 0 15px 24px; }
 .hl-story { width: min(390px, calc((100dvh - 145px) * .5625)); min-width: 260px; }
