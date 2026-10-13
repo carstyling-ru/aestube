@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Моё актуальное — Aestube</title>
+  <link rel="stylesheet" href="assets/styles.css"><link rel="stylesheet" href="assets/highlights.css">
+  <script defer src="assets/app.js"></script><script defer src="assets/highlights.js"></script>
+</head>
+<body data-active="highlights" data-highlights-page="manage">
+  <div data-header></div><main class="container layout"><aside data-sidebar></aside><section class="content">
+    <div class="page-head page-head--plain"><div><h1 class="page-head__title">Актуальное</h1><p class="page-head__meta">Короткие видео и фото — ваш опыт в нескольких секундах</p></div><div class="page-head__actions"><a class="button button--secondary" href="author.html?author=delis">Мой профиль</a></div></div>
+    <section class="panel"><div class="hl-section-head"><h2 class="hl-small-title">Сейчас в актуальном</h2><span class="field__hint" data-my-period>24 часа после публикации</span></div><div class="hl-manage-grid" data-my-active></div></section>
+    <section class="panel"><div class="hl-section-head"><div><h2 class="hl-small-title">Архив <span data-archive-count></span></h2><p class="panel__subtitle">Все добавленные публикации. Закрепите их, чтобы оставить в профиле.</p></div></div><div class="hl-manage-grid" data-my-archive></div></section>
+  </section></main><div data-footer></div>
+  <dialog class="hl-delete-dialog" data-delete-dialog><h2>Удалить публикацию?</h2><p>Она исчезнет из актуального, архива и закреплённого в профиле.</p><div class="hl-dialog-actions"><button class="button button--secondary" data-delete-cancel>Отмена</button><button class="button button--danger" data-delete-confirm>Удалить</button></div></dialog>
+</body>
+</html>

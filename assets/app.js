@@ -56,6 +56,7 @@ function shell() {
     ['upload', 'sitePlusCircle', 'Добавить видео', '', '#'],
     ['playlists', 'list', 'Плейлисты', '4', 'index.html'],
     ['gallery', 'siteImage', 'Галерея', '2', 'gallery.html'],
+    ['highlights', 'sitePlayCircle', 'Актуальное', '', 'my-highlights.html'],
     ['history', 'siteBookOpen', 'История просмотров', '', '#'],
     ['favorites', 'siteBookmark', 'Избранное', '1', '#'],
     ['subscriptions', 'siteUserGroup', 'Подписки', '0', '#'],
@@ -66,13 +67,13 @@ function shell() {
     <header class="header">
       <div class="header__top">
         <button class="mobile-menu" aria-label="Открыть меню">${icon('menu')}</button>
-        <a class="header__logo" href="index.html"><img src="assets/logo.svg" alt="Aestube"></a>
+        <a class="header__logo" href="home.html"><img src="assets/logo.svg" alt="Aestube"></a>
         <label class="header__search">${icon('search')}<input type="search" placeholder="Поиск видео, авторов и плейлистов"></label>
         <a class="header__user" href="index.html"><img class="avatar" src="assets/avatar.jpg" alt=""><span class="header__user-name">Делис</span><span class="pro-badge">PRO</span></a>
         <span class="language">RU ${icon('chevron')}</span>
       </div>
       <nav class="header__nav">
-        <a class="nav-chip" href="#">Новое</a><a class="nav-chip" href="#">Популярное</a><a class="nav-chip" href="#">Лучшее</a><a class="nav-chip" href="#">Авторы</a><a class="nav-chip" href="#">Категории</a>
+        <a class="nav-chip" href="highlights.html">Актуальное</a><a class="nav-chip" href="home.html#new">Новое</a><a class="nav-chip" href="home.html#popular">Популярное</a><a class="nav-chip" href="home.html#best">Лучшее</a><a class="nav-chip" href="authors.html">Авторы</a><a class="nav-chip" href="home.html#categories">Категории</a>
       </nav>
     </header>`);
 
@@ -81,7 +82,7 @@ function shell() {
     el.className = 'sidebar';
     el.innerHTML = `
       <nav class="side-nav">
-        ${nav.map(([id, ic, label, count, href], i) => `${i === 4 ? '<div class="side-nav__divider"></div>' : ''}<a class="${active === id ? 'active' : ''}" href="${href}">${icon(ic)}<span>${label}</span>${count ? `<em class="side-nav__count">${count}</em>` : ''}</a>`).join('')}
+        ${nav.map(([id, ic, label, count, href], i) => `${i === 5 ? '<div class="side-nav__divider"></div>' : ''}<a class="${active === id ? 'active' : ''}" href="${href}">${icon(ic)}<span>${label}</span>${count ? `<em class="side-nav__count">${count}</em>` : ''}</a>`).join('')}
         <div class="side-nav__divider"></div><a href="#">${icon('siteLogout')}<span>Выйти</span></a>
       </nav>`;
   });
