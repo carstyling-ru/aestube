@@ -103,13 +103,11 @@
     if($('[data-achievement-dialog]'))return;
     const dialog=document.createElement('dialog');dialog.className='cm-award-dialog';dialog.dataset.achievementDialog='';
     dialog.setAttribute('aria-label','Подробности достижения');
-    dialog.innerHTML='<button class="cm-dialog-close" type="button" aria-label="Закрыть подробности">×</button><div class="cm-dialog-art" data-award-art></div><div class="cm-dialog-body"><span class="cm-eyebrow" data-award-group></span><h2 data-award-title></h2><p class="cm-award-description" data-award-description></p><div class="cm-award-owner" data-award-owner></div><section class="cm-award-history" data-award-history></section><div class="cm-dialog-actions"><a class="button button--secondary" data-own-collection>Моя</a><button class="button button--primary" type="button" data-share-award>Поделиться</button></div><div class="cm-share-box" data-share-box hidden><label for="cm-share-url">Ссылка на достижение</label><div><input id="cm-share-url" readonly><button class="button button--secondary button--small" type="button" data-copy-award>Копировать</button></div><p role="status" data-share-status></p></div></div>';
+    dialog.innerHTML='<button class="cm-dialog-close" type="button" aria-label="Закрыть подробности">×</button><div class="cm-dialog-art" data-award-art></div><div class="cm-dialog-body"><span class="cm-eyebrow" data-award-group></span><h2 data-award-title></h2><p class="cm-award-description" data-award-description></p><div class="cm-award-owner" data-award-owner></div><section class="cm-award-history" data-award-history></section></div>';
     document.body.appendChild(dialog);
     dialog.addEventListener('close',()=>document.body.classList.remove('cm-award-open'));
     dialog.querySelector('.cm-dialog-close').onclick=()=>dialog.close();
     dialog.addEventListener('click',e=>{if(e.target===dialog && (e.clientX<dialog.getBoundingClientRect().left || e.clientX>dialog.getBoundingClientRect().right || e.clientY<dialog.getBoundingClientRect().top || e.clientY>dialog.getBoundingClientRect().bottom))dialog.close();});
-    dialog.querySelector('[data-share-award]').onclick=()=>{dialog.querySelector('[data-share-box]').hidden=false;dialog.querySelector('#cm-share-url').select();};
-    dialog.querySelector('[data-copy-award]').onclick=async()=>{try{await navigator.clipboard.writeText(dialog.querySelector('#cm-share-url').value);dialog.querySelector('[data-share-status]').textContent='Ссылка скопирована';}catch(_){dialog.querySelector('[data-share-status]').textContent='Выделите ссылку и скопируйте её вручную.';dialog.querySelector('#cm-share-url').select();}};
   }
   function openAward(id, authorId) {
     const a=findAuthor(authorId), award=awards.find(item=>item.id===id);if(!a || !award)return;
@@ -119,11 +117,7 @@
     dialog.querySelector('[data-award-title]').textContent=award.name;
     dialog.querySelector('[data-award-description]').textContent=`${award.id==='top10'?'Ачивка за попадание в Топ-10 авторов Aestube по итогам месяца.':award.condition} ${s.earned ? `Получена ${countText(s.count)}. Последний — ${dateText(s.last)}.` : 'Пока не получена.'}`;
     dialog.querySelector('[data-award-owner]').innerHTML=`<img src="${a.avatar || 'assets/avatar.jpg'}" alt=""><div><span>Коллекция автора</span><a href="${collectionURL(a)}">${escape(a.name)}</a></div>`;
-    dialog.querySelector('[data-award-history]').innerHTML=s.earned ? `<h3>История получения</h3>${s.dates.map(date=>`<div><span>${dateText(date)}</span><span>Получена</span></div>`).join('')}` : `<h3>Как получить</h3><p>${escape(award.condition)}</p>${award.rule==='views'?`<div class="cm-progress"><i style="width:${Math.min(100,a.views/award.value*100)}%"></i></div><p>${a.views.toLocaleString('ru-RU')} из ${award.value.toLocaleString('ru-RU')} просмотров</p>`:''}`;
-    dialog.querySelector('[data-own-collection]').href=collectionURL(currentAuthor());
-    dialog.querySelector('[data-share-award]').disabled=!s.earned;
-    dialog.querySelector('[data-share-box]').hidden=true;dialog.querySelector('[data-share-status]').textContent='';
-    const url=new URL(collectionURL(a),location.href);url.searchParams.set('achievement',award.id);dialog.querySelector('#cm-share-url').value=url.href;
+    dialog.querySelector('[data-award-history]').innerHTML=s.earned ? s.dates.map(date=>`<div><span>${dateText(date)}</span><span>Получена</span></div>`).join('') : `<h3>Как получить</h3><p>${escape(award.condition)}</p>${award.rule==='views'?`<div class="cm-progress"><i style="width:${Math.min(100,a.views/award.value*100)}%"></i></div><p>${a.views.toLocaleString('ru-RU')} из ${award.value.toLocaleString('ru-RU')} просмотров</p>`:''}`;
     if(!dialog.open)dialog.showModal();document.body.classList.add('cm-award-open');
   }
   function bindAwards() {
