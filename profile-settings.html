@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Профиль — личный кабинет Aestube</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20261013-community"><link rel="stylesheet" href="assets/highlights.css?v=20261013-community"><link rel="stylesheet" href="assets/community.css?v=20261013-community">
+  <script defer src="assets/app.js?v=20261013-community"></script><script defer src="assets/community.js?v=20261013-community"></script><script defer src="assets/highlights.js?v=20261013-community"></script>
+</head>
+<body data-active="settings" data-highlights-page="settings">
+  <div data-header></div><main class="container layout"><aside data-sidebar></aside><section class="content">
+    <div class="page-head page-head--plain"><h1 class="page-head__title">Профиль</h1></div>
+    <section class="panel cm-settings-panel"><div class="panel__head"><div><h2 class="panel__title">Адрес вашего профиля <span class="pro-badge">PRO</span></h2><p class="panel__subtitle">Используйте никнейм вместо числового ID в ссылке на свой профиль.</p></div></div>
+      <form data-profile-settings><div class="field"><label for="cm-profile-nickname">Никнейм</label><div class="cm-nickname-input"><span>@</span><input id="cm-profile-nickname" maxlength="30" autocomplete="off" spellcheck="false" aria-describedby="cm-nickname-hint"></div><span class="field__hint" id="cm-nickname-hint">От 3 до 30 символов: латинские буквы, цифры, дефис или подчёркивание. Никнейм должен начинаться с буквы. Пустое поле возвращает ссылку с ID.</span></div><div class="cm-url-preview"><span>Предпросмотр ссылки</span><code data-nickname-url></code><button class="button button--secondary button--small" type="button" data-copy-profile>Копировать</button></div><p class="cm-settings-status" role="status" data-nickname-status></p><div class="hl-editor-actions"><button class="button button--primary" type="submit">Сохранить</button><a class="button button--secondary" data-open-profile>Открыть профиль</a></div></form>
+    </section>
+  </section></main><div data-footer></div>
+</body>
+</html>

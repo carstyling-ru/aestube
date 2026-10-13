@@ -4,7 +4,8 @@
   const HOUR = 3600000;
   const $ = selector => document.querySelector(selector);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const authors = [
+  const community = window.AestubeCommunity;
+  const authors = community.init([
     {id:'delis', name:'Делис', avatar:'assets/avatar.jpg', about:'Дистрибьюторская компания косметологических брендов. Обучаем специалистов и делимся результатами.', videos:22},
     {id:'davin', name:'Dr Davin Lim', avatar:'assets/author-davin.jpg', about:'Дерматология, лазерные процедуры и забота о здоровье кожи.', videos:30},
     {id:'energy', name:'energyclinic.ufa', avatar:'assets/author-energy.jpg', about:'Терентьева Зульфия Махмутовна. Эстетическая косметология.', videos:5},
@@ -21,8 +22,8 @@
     {id:'irina', name:'Ирина Белова', initials:'ИБ', demo:true, about:'Уход за кожей и профилактика возрастных изменений.', videos:14},
     {id:'olga', name:'Ольга Соколова', initials:'ОС', demo:true, about:'Эстетическая медицина и обучение.', videos:11},
     {id:'natalia', name:'Наталья Орлова', initials:'НО', demo:true, about:'Результаты процедур и ежедневная практика.', videos:8}
-  ];
-  const authorById = id => authors.find(a => a.id === id) || authors[0];
+  ]);
+  const authorById = id => community.findAuthor(id) || authors[0];
   const periodLabel = () => `${state.period} ${state.period === 24 ? 'часа' : 'часов'}`;
   const fontFamilies = {classic:'Inter, sans-serif', editorial:'Georgia, serif', strong:'"Fira Sans", sans-serif'};
   const sampleTitles = ['Результат процедуры', 'Кожа после ухода', 'Из нашей практики', 'Ответ на частый вопрос'];
@@ -67,7 +68,7 @@
     return `<span class="hl-ring ${size} ${items.length ? authorSeen(a.id) ? 'is-seen' : '' : 'is-empty'}">${avatar(a)}</span>`;
   }
   const storyURL = (s, scope = 'single') => `highlight-view.html?author=${encodeURIComponent(s.author)}&story=${encodeURIComponent(s.id)}&scope=${scope}`;
-  const authorURL = a => `author.html?author=${encodeURIComponent(a.id)}`;
+  const authorURL = a => community.profileURL(a);
   const viewURL = (a, scope = 'feed') => `highlight-view.html?author=${encodeURIComponent(a.id)}&scope=${scope}`;
   function feed() {
     const target = $('[data-highlight-feed]');
@@ -75,7 +76,7 @@
     const sorted = [...authors].filter(a => allowedStories().some(s=>s.author === a.id)).sort((a,b) => Number(authorSeen(a.id)) - Number(authorSeen(b.id)) || Math.max(...storiesFor(b.id).map(s=>s.created)) - Math.max(...storiesFor(a.id).map(s=>s.created)));
     target.innerHTML = sorted.length ? sorted.map(a => {
       const items = storiesFor(a.id);
-      return `<a class="hl-avatar-item" href="${viewURL(a)}" aria-label="${esc(a.name)}: ${items.length} ${items.length === 1 ? 'публикация' : 'публикации'}, ${authorSeen(a.id) ? 'просмотрено' : 'не просмотрено'}">${ring(a)}<span class="hl-avatar-item__name">${esc(a.name)}</span>${document.body.dataset.highlightsPage === 'feed' ? `<span class="hl-avatar-item__meta">${items.length} ${items.length === 1 ? 'публикация' : 'публикации'} · ${age(items[0].created)}</span>` : ''}</a>`;
+      return `<a class="hl-avatar-item" href="${viewURL(a)}" aria-label="${esc(a.name)}: ${items.length} ${items.length === 1 ? 'публикация' : 'публикации'}, ${authorSeen(a.id) ? 'просмотрено' : 'не просмотрено'}">${ring(a)}<span class="hl-avatar-item__name">${esc(a.name)}</span>${community.badge(a)}${document.body.dataset.highlightsPage === 'feed' ? `<span class="hl-avatar-item__meta">${items.length} ${items.length === 1 ? 'публикация' : 'публикации'} · ${age(items[0].created)}</span>` : ''}</a>`;
     }).join('') : '<p class="hl-empty">Пока нет актуальных публикаций. Посмотрите закреплённое в профилях авторов.</p>';
     document.querySelectorAll('[data-scroll]').forEach(button => button.onclick = () => target.scrollBy({left:Number(button.dataset.scroll) * target.clientWidth * .8,behavior:'smooth'}));
   }
@@ -95,12 +96,12 @@
   }
   function authorCard(a) {
     const subscribed = state.subscriptions.includes(a.id);
-    return `<article class="hl-author-card"><a class="hl-profile-link" href="${storiesFor(a.id).length ? viewURL(a,'author') : authorURL(a)}" aria-label="${esc(a.name)}${storiesFor(a.id).length ? ' — смотреть актуальное' : ''}">${ring(a,'hl-ring--large')}</a><a class="hl-author-card__name" href="${authorURL(a)}">${esc(a.name)}</a><span class="hl-author-card__stats">${a.id === 'delis' ? 6 : 1} подписано · ${a.videos} видео</span><p class="hl-author-card__about">${esc(a.about)}</p>${a.demo ? '<span class="hl-author-card__note">Автор-пример</span>' : ''}<button class="button button--secondary button--small" data-subscribe="${a.id}">${subscribed ? 'Отписаться' : 'Подписаться'}</button></article>`;
+    return `<article class="hl-author-card"><a class="hl-profile-link" href="${storiesFor(a.id).length ? viewURL(a,'author') : authorURL(a)}" aria-label="${esc(a.name)}${storiesFor(a.id).length ? ' — смотреть актуальное' : ''}">${ring(a,'hl-ring--large')}</a><div class="cm-name-row"><a class="hl-author-card__name" href="${authorURL(a)}">${esc(a.name)}</a>${community.badge(a)}${a.pro?'<span class="pro-badge">PRO</span>':''}</div><span class="hl-author-card__stats">${a.id === 'delis' ? 6 : 1} подписано · ${a.videos} видео</span><p class="hl-author-card__about">${esc(a.about)}</p>${a.demo ? '<span class="hl-author-card__note">Автор-пример</span>' : ''}<button class="button button--secondary button--small" data-subscribe="${a.id}">${subscribed ? 'Отписаться' : 'Подписаться'}</button></article>`;
   }
   function homeAuthorCard(a, index) {
     const hasHighlights = (index === 1 || index === 2) && storiesFor(a.id).length > 0;
     const authorAvatar = hasHighlights ? ring(a,'hl-ring--large') : `<span class="hl-ring hl-ring--large is-empty">${avatar(a)}</span>`;
-    return `<article class="hl-author-card hl-author-card--horizontal"><a class="hl-profile-link" href="${hasHighlights ? viewURL(a,'author') : authorURL(a)}" aria-label="${esc(a.name)}${hasHighlights ? ' — смотреть актуальное' : ''}">${authorAvatar}</a><div class="hl-author-card__content"><a class="hl-author-card__name" href="${authorURL(a)}">${esc(a.name)}</a><span class="hl-author-card__stats">${a.id === 'delis' ? 6 : 1} подписано · ${a.videos} видео</span><p class="hl-author-card__about">${esc(a.about)}</p></div></article>`;
+    return `<article class="hl-author-card hl-author-card--horizontal"><a class="hl-profile-link" href="${hasHighlights ? viewURL(a,'author') : authorURL(a)}" aria-label="${esc(a.name)}${hasHighlights ? ' — смотреть актуальное' : ''}">${authorAvatar}</a><div class="hl-author-card__content"><div class="cm-name-row"><a class="hl-author-card__name" href="${authorURL(a)}">${esc(a.name)}</a>${community.badge(a)}</div><span class="hl-author-card__stats">${a.id === 'delis' ? 6 : 1} подписано · ${a.videos} видео</span><p class="hl-author-card__about">${esc(a.about)}</p></div></article>`;
   }
   function subscriptions() {
     document.querySelectorAll('[data-subscribe]').forEach(button => button.addEventListener('click', () => {
@@ -128,16 +129,21 @@
     target.innerHTML = pins.map(s => `<a class="hl-avatar-item" href="${storyURL(s,'pinned')}" aria-label="${esc(s.title)}"><span class="hl-ring is-empty"><img src="${esc(s.cover || s.src)}" alt=""></span><span class="hl-avatar-item__name">${esc(s.title)}</span></a>`).join('');
   }
   function profile() {
-    const id = new URLSearchParams(location.search).get('author') || 'delis';
-    const a = authorById(id);
+    const a = community.fromURL();
+    if (!a) { $('[data-author-profile]').innerHTML='<h1 class="hl-section-title">Автор не найден</h1><p class="cm-empty">Проверьте никнейм или выберите автора из списка.</p><a class="button button--secondary" href="authors.html">Авторы</a>'; document.querySelectorAll('[data-profile-tabs], [data-collection-content]').forEach(el=>el.hidden=true); return; }
     document.title = `${a.name} — Aestube`;
-    $('[data-author-profile]').innerHTML = `<div class="author-profile__top"><a class="hl-profile-link" href="${storiesFor(a.id).length ? viewURL(a,'pinned') : '#'}" aria-label="Смотреть закреплённое автора">${ring(a,'hl-ring--large')}</a><div><h1 class="author-profile__name">${esc(a.name)} ${a.id === 'delis' ? '<span class="pro-badge">PRO</span>' : ''}</h1><p class="author-profile__about">${esc(a.about)}</p><div class="author-profile__stats"><span>${a.id === 'delis' ? '6 подписано · 22 видео · 2 фото' : `1 подписано · ${a.videos} видео`}</span></div></div><button class="button button--secondary hl-profile-subscribe" data-subscribe="${a.id}">${state.subscriptions.includes(a.id) ? 'Отписаться' : 'Подписаться'}</button></div>`;
-    $('[data-author-videos]').innerHTML = videos.filter(v=>v.author === a.id).map(videoCard).join('') || videos.slice(4,8).map(v=>videoCard({...v,author:a.id})).join('');
-    renderPins(a.id); subscriptions();
+    $('[data-author-profile]').innerHTML = `<div class="author-profile__top"><a class="hl-profile-link" href="${storiesFor(a.id).length ? viewURL(a,'pinned') : '#'}" aria-label="Смотреть закреплённое автора">${ring(a,'hl-ring--large')}</a><div><h1 class="author-profile__name">${esc(a.name)} ${community.badge(a,true)} ${a.pro ? '<span class="pro-badge">PRO</span>' : ''}</h1><p class="author-profile__about">${esc(a.about)}</p><div class="author-profile__stats"><span>${a.id === 'delis' ? '6 подписано · 22 видео · 2 фото' : `1 подписано · ${a.videos} видео`}</span></div></div><button class="button button--secondary hl-profile-subscribe" data-subscribe="${a.id}">${state.subscriptions.includes(a.id) ? 'Отписаться' : 'Подписаться'}</button></div>${community.profileFeatures(a,document.body.dataset.highlightsPage==='collection')}`;
+    const authorVideos=$('[data-author-videos]');
+    if(authorVideos)authorVideos.innerHTML = videos.filter(v=>v.author === a.id).map(videoCard).join('') || videos.slice(4,8).map(v=>videoCard({...v,author:a.id})).join('');
+    renderPins(a.id); subscriptions();community.tabs(a,document.body.dataset.highlightsPage);community.bindAwards();
+    return a;
   }
   function galleryProfile() {
     const img = $('.author-profile__avatar');
     if (img) { const link = document.createElement('a'); link.className = 'hl-profile-link'; link.href = viewURL(authors[0],'pinned'); link.setAttribute('aria-label','Смотреть закреплённое Делис'); link.innerHTML = ring(authors[0],'hl-ring--large'); img.replaceWith(link); }
+    const name=$('.author-profile__name');if(!name.querySelector('.cm-type-badge'))name.insertAdjacentHTML('beforeend',community.badge(authors[0],true));
+    if(!$('[data-gallery-awards]')){const features=document.createElement('div');features.dataset.galleryAwards='';features.innerHTML=community.profileFeatures(authors[0]);$('.author-profile__top').after(features);}
+    community.tabs(authors[0],'gallery');community.bindAwards();
     renderPins('delis');
   }
   function manage() {
@@ -378,8 +384,10 @@
     $('.mobile-menu')?.addEventListener('click',()=>$('.header__nav')?.classList.toggle('is-open'));
     if(page === 'home') {feed();home();}
     if(page === 'feed')feed();
-    if(page === 'authors') {$('[data-authors-list]').innerHTML=authors.map(authorCard).join('');subscriptions();}
+    if(page === 'authors') community.initFilter(list=>{$('[data-authors-list]').innerHTML=list.map(authorCard).join('');subscriptions();});
     if(page === 'author') profile();
+    if(page === 'collection') {const author=profile();if(author)community.renderCollection(author);}
+    if(page === 'settings')community.initSettings();
     if(page === 'gallery') galleryProfile();
     if(page === 'manage') {
       manage();const dialog=$('[data-delete-dialog]');$('[data-delete-cancel]').addEventListener('click',()=>dialog.close());

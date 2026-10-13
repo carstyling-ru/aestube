@@ -5,6 +5,7 @@ const icons = {
   chevronLeft: '<path d="m15 18-6-6 6-6"/>',
   chevronDown: '<path d="m6 9 6 6 6-6"/>',
   circleStar: '<circle cx="12" cy="12" r="9"/><path d="m12 6.5 1.7 3.45 3.8 .55-2.75 2.68 .65 3.8L12 15.2l-3.4 1.78 .65-3.8L6.5 10.5l3.8-.55Z"/>',
+  award: '<path d="M7 3h10v5a5 5 0 0 1-10 0V3ZM7 5H3v3a4 4 0 0 0 4 4M17 5h4v3a4 4 0 0 1-4 4M12 13v5M8 21h8M9 18h6v3H9"/>',
   home: '<path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/>',
   video: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3Z"/>',
   upload: '<path d="M12 16V4m0 0L7 9m5-5 5 5"/><path d="M5 20h14"/>',
@@ -60,10 +61,11 @@ function shell() {
     ['playlists', 'list', 'Плейлисты', '4', 'index.html'],
     ['gallery', 'siteImage', 'Галерея', '2', 'gallery.html'],
     ['highlights', 'circleStar', 'Актуальное', '', 'my-highlights.html'],
+    ['collection', 'award', 'Коллекция', '', window.AestubeCommunity?.collectionURL(window.AestubeCommunity.currentAuthor()) || 'collection.html?nickname=delis'],
     ['history', 'siteBookOpen', 'История просмотров', '', '#'],
     ['favorites', 'siteBookmark', 'Избранное', '1', '#'],
     ['subscriptions', 'siteUserGroup', 'Подписки', '0', '#'],
-    ['settings', 'siteUser', 'Профиль', '', '#']
+    ['settings', 'siteUser', 'Профиль', '', 'profile-settings.html']
   ];
 
   document.querySelectorAll('[data-header]').forEach(el => el.innerHTML = `
@@ -88,7 +90,7 @@ function shell() {
     el.className = 'sidebar';
     el.innerHTML = `
       <nav class="side-nav">
-        ${nav.map(([id, ic, label, count, href], i) => `${i === 5 ? '<div class="side-nav__divider"></div>' : ''}<a class="${active === id ? 'active' : ''}" href="${href}">${icon(ic)}<span>${label}</span>${count ? `<em class="side-nav__count">${count}</em>` : ''}</a>`).join('')}
+        ${nav.map(([id, ic, label, count, href], i) => `${i === 6 ? '<div class="side-nav__divider"></div>' : ''}<a class="${active === id ? 'active' : ''}" href="${href}">${icon(ic)}<span>${label}</span>${count ? `<em class="side-nav__count">${count}</em>` : ''}</a>`).join('')}
         <div class="side-nav__divider"></div><a href="#">${icon('siteLogout')}<span>Выйти</span></a>
       </nav>`;
   });
