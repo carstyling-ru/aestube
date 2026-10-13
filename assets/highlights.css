@@ -9,8 +9,9 @@
 .hl-section-head .hl-small-title { margin: 0; }
 .hl-arrows { display: flex; gap: 12px; }
 .hl-arrows button { width: 46px; height: 46px; font-size: 26px; }
-.hl-strip { display: grid; grid-auto-flow: column; grid-auto-columns: 76px; gap: 8px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; padding: 2px 1px 4px; }
+.hl-strip { display: grid; grid-auto-flow: column; grid-auto-columns: 104px; gap: 16px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; padding: 2px 1px 4px; }
 .hl-strip::-webkit-scrollbar { display: none; }
+.hl-strip .hl-ring { width: 96px; height: 96px; }
 .hl-avatar-item { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 0; padding: 0; border: 0; color: var(--ink); background: none; text-decoration: none; cursor: pointer; text-align: center; }
 .hl-avatar-item__name { display: block; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 500; }
 .hl-avatar-item__meta { color: var(--muted); font-size: 11px; line-height: 1.5; }
@@ -148,7 +149,6 @@ a:hover > .hl-ring { transform: scale(1.04); }
 .hl-story-end .button { width: 100%; margin-top: 12px; font-size: 12px; }
 .hl-media-error { position: absolute; top: 38%; left: 10%; right: 10%; padding: 15px; border-radius: 8px; background: #10233fee; font-size: 13px; line-height: 1.5; }
 .hl-mobile-nav { display: none; }
-@media (min-width: 1500px) { .hl-strip { grid-auto-columns: 76px; gap: 10px; } }
 @media (max-width: 1100px) { .hl-feed-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } .hl-manage-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 @media (max-width: 820px) {
   .hl-feed-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 12px; }
@@ -166,7 +166,6 @@ a:hover > .hl-ring { transform: scale(1.04); }
   .hl-section-head { gap: 8px; padding-bottom: 16px; margin-bottom: 18px; }
   .hl-section-head > .button { font-size: 11px; padding: 8px 10px; }
   .hl-arrows { gap: 5px; } .hl-arrows button { width: 34px; height: 34px; font-size: 22px; }
-  .hl-strip { grid-auto-columns: 72px; }
   .hl-feed-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 10px; }
   .hl-feed-grid .hl-ring { width: 78px; height: 78px; }
   .hl-feed-toolbar { flex-direction: column; gap: 15px; }
