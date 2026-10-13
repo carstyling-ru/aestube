@@ -101,7 +101,7 @@
   function homeAuthorCard(a, index) {
     const hasHighlights = (index === 1 || index === 2) && storiesFor(a.id).length > 0;
     const authorAvatar = hasHighlights ? ring(a,'hl-ring--large') : `<span class="hl-ring hl-ring--large is-empty">${avatar(a)}</span>`;
-    return `<article class="hl-author-card hl-author-card--horizontal"><a class="hl-profile-link" href="${hasHighlights ? viewURL(a,'author') : authorURL(a)}" aria-label="${esc(a.name)}${hasHighlights ? ' — смотреть актуальное' : ''}">${authorAvatar}</a><div class="hl-author-card__content"><div class="cm-name-row"><a class="hl-author-card__name" href="${authorURL(a)}">${esc(a.name)}</a>${community.badge(a)}</div><span class="hl-author-card__stats">${a.id === 'delis' ? 6 : 1} подписано · ${a.videos} видео</span><p class="hl-author-card__about">${esc(a.about)}</p></div></article>`;
+    return `<article class="hl-author-card hl-author-card--horizontal"><a class="hl-profile-link" href="${hasHighlights ? viewURL(a,'author') : authorURL(a)}" aria-label="${esc(a.name)}${hasHighlights ? ' — смотреть актуальное' : ''}">${authorAvatar}</a><div class="hl-author-card__content"><div class="cm-name-row"><a class="hl-author-card__name" href="${authorURL(a)}">${esc(a.name)}</a>${community.badge(a)}${a.pro?'<span class="pro-badge">PRO</span>':''}</div><span class="hl-author-card__stats">${a.id === 'delis' ? 6 : 1} подписано · ${a.videos} видео</span><p class="hl-author-card__about">${esc(a.about)}</p></div></article>`;
   }
   function subscriptions() {
     document.querySelectorAll('[data-subscribe]').forEach(button => button.addEventListener('click', () => {

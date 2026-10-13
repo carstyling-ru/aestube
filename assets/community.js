@@ -10,9 +10,9 @@
   };
   // Demonstration account metadata and award events; no production verification is performed.
   const meta = {
-    delis:{number:6,type:'training',pro:true,nickname:'delis',joined:'2021-06-11',views:148360},
-    davin:{number:42,type:'doctor',pro:true,nickname:'dr-davin-lim',joined:'2023-04-17',views:48200},
-    energy:{number:30,type:'doctor',joined:'2024-02-20',views:12600},
+    delis:{number:6,type:'author',pro:true,nickname:'delis',joined:'2021-06-11',views:148360},
+    davin:{number:42,type:'doctor',pro:false,nickname:'dr-davin-lim',joined:'2023-04-17',views:48200},
+    energy:{number:30,type:'training',joined:'2024-02-20',views:12600},
     skin:{number:34,type:'doctor',joined:'2024-05-08',views:24500},
     diepenbrock:{number:38,type:'doctor',joined:'2021-03-15',views:108000},
     beyond:{number:36,type:'author',joined:'2025-01-19',views:6500},
@@ -54,7 +54,7 @@
   function enrich(a) {
     const data = meta[a.id] || {number:a.id,type:'author',joined:'2025-01-01',views:0};
     const own = overrides[a.id] || {};
-    return {...a,...data,nickname:data.pro ? own.nickname ?? data.nickname ?? '' : ''};
+    return {...a,...data,nickname:data.pro ? own.nickname ?? data.nickname ?? '' : data.nickname || ''};
   }
   const currentAuthor = () => enrich(authors.find(a=>a.id==='delis') || {id:'delis',name:'Делис'});
   function findAuthor(value) {
@@ -64,7 +64,8 @@
     const p=new URLSearchParams(location.search);
     return p.has('nickname') ? findAuthor(p.get('nickname')) : findAuthor(p.get('author') || 'delis');
   }
-  const identity = a => a.pro && a.nickname ? `nickname=${encodeURIComponent(a.nickname)}` : `author=${encodeURIComponent(a.number)}`;
+  // Existing nicknames remain valid when the visible account badge changes.
+  const identity = a => a.nickname ? `nickname=${encodeURIComponent(a.nickname)}` : `author=${encodeURIComponent(a.number)}`;
   const profileURL = a => `author.html?${identity(enrich(a))}`;
   const collectionURL = a => `${profileURL(a)}&collection=1`;
   function badge(a, full = false) {
@@ -86,7 +87,7 @@
     a=enrich(a);const earned=earnedAwards(a);
     return `${a.nickname ? `<p class="cm-nickname">@${escape(a.nickname)}</p>` : ''}${!isCollection && earned.length ? `<div class="cm-profile-awards"><span class="cm-profile-awards__label">Достижения</span><div class="cm-profile-awards__items">${earned.slice(0,4).map(item=>`<button class="cm-mini-award" type="button" data-achievement="${item.id}" data-award-author="${a.id}" aria-label="${escape(item.name)}" title="${escape(item.name)}"><img src="${art(item)}" alt="">${awardState(a,item).count>1 ? `<span>${awardState(a,item).count}</span>` : ''}</button>`).join('')}<a class="cm-more-awards" href="${collectionURL(a)}" data-toggle-collection aria-expanded="false" aria-controls="cm-inline-collection" data-collapsed-label="${earned.length>4 ? `Ещё ${earned.length-4}` : 'Коллекция'} ›">${earned.length>4 ? `Ещё ${earned.length-4}` : 'Коллекция'} ›</a></div></div>${collectionMarkup()}` : ''}`;
   }
-  function collectionMarkup(){return `<section id="cm-inline-collection" class="cm-collection cm-collection--inline" data-collection-content hidden><div class="cm-collection-head"><div><h2 class="hl-small-title">Коллекция <span class="cm-count" data-collection-count></span></h2><p>История достижений автора на Aestube</p></div><button class="button button--secondary" type="button" data-share-collection>Поделиться коллекцией</button></div><div class="cm-collection-share" data-collection-share hidden><label>Ссылка на коллекцию<input readonly aria-label="Ссылка на коллекцию"></label><button class="button button--secondary button--small" data-copy-collection type="button">Копировать</button></div><div class="tabs cm-collection-tabs"><button class="tab active" data-collection-filter="earned" type="button">Получено</button><button class="tab" data-collection-filter="all" type="button">Все достижения</button></div><div class="cm-collection-grid" data-collection-grid></div></section>`;}
+  function collectionMarkup(){return `<section id="cm-inline-collection" class="cm-collection cm-collection--inline" data-collection-content aria-label="Полученные достижения" hidden><div class="cm-collection-grid" data-collection-grid></div></section>`;}
   function initProfileCollection(a){
     const section=$('#cm-inline-collection'),toggle=$('[data-toggle-collection]');if(!section || !toggle)return;
     function setOpen(open){section.hidden=!open;toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'Свернуть ‹':toggle.dataset.collapsedLabel;}
@@ -133,18 +134,9 @@
   function renderCollection(a,root=document) {
     const $ = selector=>root.querySelector(selector);
     const target=$('[data-collection-grid]');if(!target)return;
-    a=enrich(a);let category='earned';
-    const earned=earnedAwards(a);$('[data-collection-count]').textContent=earned.length;
-    $('[data-share-collection]').onclick=()=>{
-      const box=$('[data-collection-share]');box.hidden=!box.hidden;box.querySelector('input').value=new URL(collectionURL(a),location.href).href;
-    };
-    $('[data-copy-collection]').onclick=async()=>{const input=$('[data-collection-share] input');try{await navigator.clipboard.writeText(input.value);showToast('Ссылка на коллекцию скопирована');}catch(_){input.select();showToast('Скопируйте выделенную ссылку');}};
-    function render() {
-      const visible=awards.filter(item=>category==='all' || awardState(a,item).earned);
-      target.innerHTML=visible.length ? visible.map(item=>{const s=awardState(a,item);return `<button class="cm-collectible ${s.earned?'':'is-locked'}" data-achievement="${item.id}" data-award-author="${a.id}" type="button"><span class="cm-collectible__art"><img src="${art(item)}" alt="">${s.count>1?`<b class="cm-award-count">×${s.count}</b>`:''}${!s.earned?'<span class="cm-locked-label">Не получена</span>':''}</span><strong>${item.name}</strong><span>${s.earned ? dateText(s.last) : item.group}</span></button>`;}).join('') : '<p class="cm-empty">Пока нет достижений. Посмотрите все награды и условия их получения.</p>';
-    }
-    root.querySelectorAll('[data-collection-filter]').forEach(button=>button.onclick=()=>{category=button.dataset.collectionFilter;root.querySelectorAll('[data-collection-filter]').forEach(b=>b.classList.toggle('active',b===button));render();});
-    render();bindAwards();const id=new URLSearchParams(location.search).get('achievement');if(id)openAward(id,a.id);
+    a=enrich(a);const visible=earnedAwards(a);
+    target.innerHTML=visible.length ? visible.map(item=>{const s=awardState(a,item);return `<button class="cm-collectible" data-achievement="${item.id}" data-award-author="${a.id}" type="button"><span class="cm-collectible__art"><img src="${art(item)}" alt="">${s.count>1?`<b class="cm-award-count">×${s.count}</b>`:''}</span><strong>${item.name}</strong><span>${dateText(s.last)}</span></button>`;}).join('') : '<p class="cm-empty">Пока нет достижений.</p>';
+    bindAwards();const id=new URLSearchParams(location.search).get('achievement');if(id && visible.some(item=>item.id===id))openAward(id,a.id);
   }
   function initFilter(renderCards) {
     const host=$('[data-author-filter]');if(!host)return;
