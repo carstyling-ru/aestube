@@ -71,7 +71,7 @@ function shell() {
         <button class="mobile-menu" aria-label="Открыть меню">${icon('menu')}</button>
         <a class="header__logo" href="home.html"><img src="assets/logo.svg" alt="Aestube"></a>
         <label class="header__search">${icon('search')}<input type="search" placeholder="Поиск видео, авторов и плейлистов"></label>
-        <a class="header__user" href="author.html?author=delis" aria-label="Профиль Делис"><img class="avatar" src="assets/avatar.jpg" alt=""><span class="header__user-name">Делис</span><span class="pro-badge">PRO</span>${icon('chevron','header__profile-arrow')}</a>
+        <a class="header__user" href="my-highlights.html" aria-label="Мой кабинет"><img class="avatar" src="assets/avatar.jpg" alt=""><span class="header__user-name">Делис</span><span class="pro-badge">PRO</span>${icon('chevron','header__profile-arrow')}</a>
         <div class="language" data-language>
           <button class="language__toggle" type="button" data-language-toggle aria-expanded="false" aria-haspopup="menu" aria-controls="header-language-menu"><span data-language-label>Русский</span>${icon('chevronDown')}</button>
           <div class="language__menu" id="header-language-menu" role="menu" aria-label="Выберите язык" data-language-menu hidden></div>
