@@ -123,7 +123,9 @@
     const target = $('[data-author-pins]');
     if (!target) return;
     const pins = state.stories.filter(s=>s.author === id && s.pinned).sort((a,b)=>b.created-a.created);
-    target.innerHTML = pins.length ? pins.map(s => `<a class="hl-avatar-item" href="${storyURL(s,'pinned')}" aria-label="${esc(s.title)}"><span class="hl-ring is-empty"><img src="${esc(s.cover || s.src)}" alt=""></span><span class="hl-avatar-item__name">${esc(s.title)}</span></a>`).join('') : '<p class="hl-empty">Автор пока не закрепил публикации.</p>';
+    const section = target.closest('.hl-pinned-section');
+    if (section) section.hidden = !pins.length;
+    target.innerHTML = pins.map(s => `<a class="hl-avatar-item" href="${storyURL(s,'pinned')}" aria-label="${esc(s.title)}"><span class="hl-ring is-empty"><img src="${esc(s.cover || s.src)}" alt=""></span><span class="hl-avatar-item__name">${esc(s.title)}</span></a>`).join('');
   }
   function profile() {
     const id = new URLSearchParams(location.search).get('author') || 'delis';
