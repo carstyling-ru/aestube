@@ -135,18 +135,19 @@
   function initFilter(renderCards) {
     const host=$('[data-author-filter]');if(!host)return;
     let selected=new Set((new URLSearchParams(location.search).get('types') || '').split(',').filter(key=>TYPES[key]));
-    host.innerHTML=`<div class="cm-filter-row"><details class="cm-type-filter"><summary><span>Тип аккаунта:</span> <b data-type-filter-label>Все</b><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary><fieldset><legend class="cm-sr-only">Тип аккаунта</legend>${Object.entries(TYPES).map(([id,type])=>`<label><input type="checkbox" value="${id}" ${selected.has(id)?'checked':''}><span>${type.label}</span><b aria-hidden="true">${authors.filter(a=>enrich(a).type===id).length}</b></label>`).join('')}<button class="cm-filter-reset" type="button">Сбросить</button></fieldset></details><span class="cm-filter-result" data-filter-count></span></div><div class="cm-filter-chips" data-type-chips></div>`;
+    host.innerHTML=`<div class="cm-filter-row"><details class="cm-type-filter"><summary><span>Тип аккаунта:</span> <b data-type-filter-label>Все</b><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary><fieldset><legend class="cm-sr-only">Тип аккаунта</legend>${Object.entries(TYPES).map(([id,type])=>`<label><input type="checkbox" value="${id}" ${selected.has(id)?'checked':''}><span>${type.label}</span><b aria-hidden="true">${authors.filter(a=>enrich(a).type===id).length}</b></label>`).join('')}<button class="cm-filter-reset" type="button">Сбросить</button></fieldset></details></div>`;
+    const meta=$('[data-author-filter-meta]');
     const detail=host.querySelector('details');
     function update() {
       const list=authors.map(enrich).filter(a=>!selected.size || selected.has(a.type));renderCards(list);
       host.querySelector('[data-type-filter-label]').textContent=!selected.size?'Все':selected.size===1?TYPES[[...selected][0]].short:`Выбрано: ${selected.size}`;
-      host.querySelector('[data-filter-count]').textContent=`Показано ${list.length} из ${authors.length}`;
-      host.querySelector('[data-type-chips]').innerHTML=[...selected].map(id=>`<button type="button" data-remove-type="${id}">${TYPES[id].short}<span aria-hidden="true">×</span></button>`).join('');
+      meta.querySelector('[data-filter-count]').textContent=`Показано ${list.length} из ${authors.length}`;
+      meta.querySelector('[data-type-chips]').innerHTML=[...selected].map(id=>`<button type="button" data-remove-type="${id}">${TYPES[id].short}<span aria-hidden="true">×</span></button>`).join('');
       const url=new URL(location.href);if(selected.size)url.searchParams.set('types',[...selected].join(','));else url.searchParams.delete('types');history.replaceState(null,'',url);
     }
     host.querySelectorAll('input').forEach(input=>input.onchange=()=>{input.checked?selected.add(input.value):selected.delete(input.value);update();});
     host.querySelector('.cm-filter-reset').onclick=()=>{selected.clear();host.querySelectorAll('input').forEach(i=>i.checked=false);update();};
-    host.addEventListener('click',e=>{const chip=e.target.closest('[data-remove-type]');if(chip){selected.delete(chip.dataset.removeType);host.querySelector(`input[value="${chip.dataset.removeType}"]`).checked=false;update();}});
+    meta.addEventListener('click',e=>{const chip=e.target.closest('[data-remove-type]');if(chip){selected.delete(chip.dataset.removeType);host.querySelector(`input[value="${chip.dataset.removeType}"]`).checked=false;update();}});
     document.addEventListener('click',e=>{if(!host.contains(e.target))detail.open=false;});
     host.addEventListener('keydown',e=>{if(e.key==='Escape'){detail.open=false;host.querySelector('summary').focus();}});update();
   }
