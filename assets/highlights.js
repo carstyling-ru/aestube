@@ -25,7 +25,11 @@
   ]);
   const authorById = id => community.findAuthor(id) || authors[0];
   const periodLabel = () => `${state.period} ${state.period === 24 ? 'часа' : 'часов'}`;
-  const fontFamilies = {classic:'Inter, sans-serif', editorial:'Georgia, serif', strong:'"Fira Sans", sans-serif'};
+  const fontPresets = {
+    classic:{family:'Inter, sans-serif',weight:'700',style:'normal'},
+    editorial:{family:'Georgia, serif',weight:'400',style:'normal'},
+    strong:{family:'Unbounded, sans-serif',weight:'900',style:'italic'}
+  };
   const sampleTitles = ['Результат процедуры', 'Кожа после ухода', 'Из нашей практики', 'Ответ на частый вопрос'];
   let state;
   try { state = JSON.parse(localStorage.getItem(KEY)); } catch (_) {}
@@ -182,9 +186,11 @@
   }
   function styleText(el, story, scale = 1) {
     const style = story.textStyle || {};
+    const preset = fontPresets[style.font] || fontPresets.classic;
     el.textContent = story.text || '';
+    if(style.font === 'strong') {const emphasis=document.createElement('em');emphasis.textContent=story.text || '';el.replaceChildren(emphasis);}
     el.hidden = !story.text;
-    Object.assign(el.style,{fontFamily:fontFamilies[style.font] || fontFamilies.classic,fontSize:`${(style.size || 25) * scale}px`,fontWeight:style.font === 'strong' ? '600' : '400',color:style.color || '#ffffff',background:style.backdrop === false ? 'transparent' : style.background || '#10233f',textAlign:style.align || 'center',left:`${style.x ?? 50}%`,top:`${style.y ?? 72}%`});
+    Object.assign(el.style,{fontFamily:preset.family,fontSize:`${(style.size || 25) * scale}px`,fontWeight:preset.weight,fontStyle:preset.style,color:style.color || '#ffffff',background:style.backdrop === false ? 'transparent' : style.background || '#10233f',textAlign:style.align || 'center',left:`${style.x ?? 50}%`,top:`${style.y ?? 72}%`});
   }
   function initViewerPopup() {
     if(document.body.dataset.highlightsPage==='viewer')return;
