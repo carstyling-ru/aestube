@@ -9,7 +9,7 @@
 .nt-panel-head { display: flex; align-items: center; justify-content: space-between; padding: 15px 16px 11px 20px; border-bottom: 1px solid var(--soft-line); }
 .nt-panel-head h2 { margin: 0; font-family: 'Fira Sans', sans-serif; font-size: 20px; font-weight: 500; }
 .nt-more { position: relative; }
-.nt-more-button { font-size: 18px; letter-spacing: 1px; }
+.nt-more-icon { width: 24px; height: 24px; }
 .nt-menu { position: absolute; top: 100%; right: 0; z-index: 2; min-width: 245px; padding: 6px; border: 1px solid var(--soft-line); border-radius: 10px; background: white; box-shadow: 0 10px 30px #10233f24; }
 .nt-menu a, .nt-menu button { display: block; width: 100%; padding: 11px 12px; border: 0; border-radius: 6px; background: white; color: var(--ink); text-align: left; text-decoration: none; font: inherit; font-size: 13px; white-space: nowrap; cursor: pointer; }
 .nt-menu a:hover, .nt-menu button:hover { background: var(--canvas); }
