@@ -5,6 +5,7 @@ const icons = {
   chevronLeft: '<path d="m15 18-6-6 6-6"/>',
   chevronDown: '<path d="m6 9 6 6 6-6"/>',
   circleStar: '<circle cx="12" cy="12" r="9"/><path d="m12 6.5 1.7 3.45 3.8 .55-2.75 2.68 .65 3.8L12 15.2l-3.4 1.78 .65-3.8L6.5 10.5l3.8-.55Z"/>',
+  bell: '<path d="M18 8a6 6 0 0 0-12 0c0 7-2 7-2 9h16c0-2-2-2-2-9ZM10 20a2 2 0 0 0 4 0"/>',
   award: '<path d="M7 3h10v5a5 5 0 0 1-10 0V3ZM7 5H3v3a4 4 0 0 0 4 4M17 5h4v3a4 4 0 0 1-4 4M12 13v5M8 21h8M9 18h6v3H9"/>',
   home: '<path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/>',
   video: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3Z"/>',
@@ -64,6 +65,7 @@ function shell() {
     ['history', 'siteBookOpen', 'История просмотров', '', '#'],
     ['favorites', 'siteBookmark', 'Избранное', '1', '#'],
     ['subscriptions', 'siteUserGroup', 'Подписки', '0', '#'],
+    ['notifications', 'bell', 'Уведомления', '', 'notifications.html'],
     ['settings', 'siteUser', 'Профиль', '', 'profile-settings.html']
   ];
 
@@ -73,6 +75,7 @@ function shell() {
         <button class="mobile-menu" aria-label="Открыть меню">${icon('menu')}</button>
         <a class="header__logo" href="home.html"><img src="assets/logo.svg" alt="Aestube"></a>
         <label class="header__search">${icon('search')}<input type="search" placeholder="Поиск видео, авторов и плейлистов"></label>
+        <div class="nt-header" data-notifications></div>
         <a class="header__user" href="my-highlights.html" aria-label="Мой кабинет"><img class="avatar" src="assets/avatar.jpg" alt=""><span class="header__user-name">Делис</span><span class="pro-badge">PRO</span>${icon('chevron','header__profile-arrow')}</a>
         <div class="language" data-language>
           <button class="language__toggle" type="button" data-language-toggle aria-expanded="false" aria-haspopup="menu" aria-controls="header-language-menu"><span data-language-label>Русский</span>${icon('chevronDown')}</button>
