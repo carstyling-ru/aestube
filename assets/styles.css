@@ -63,7 +63,7 @@ img { display: block; max-width: 100%; }
 .header__user { margin-left: auto; display: flex; align-items: center; gap: 9px; text-decoration: none; font-weight: 700; white-space: nowrap; }
 .header__profile-arrow { width: 16px; height: 16px; }
 .avatar { width: 34px; height: 34px; object-fit: cover; border-radius: 50%; background: var(--soft-line); }
-.pro-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; color: white; background: var(--purple); border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.pro-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; color: white; background: #2c5d9f; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
 .language { position: relative; display: flex; align-items: center; margin-left: 10px; font-size: 12px; flex: 0 0 auto; }
 .language__toggle { display: inline-flex; align-items: center; gap: 4px; padding: 8px 0; border: 0; color: inherit; background: none; cursor: pointer; font-size: inherit; white-space: nowrap; }
 .language__toggle > span { text-decoration: underline; text-underline-offset: 2px; }
