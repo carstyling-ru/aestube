@@ -20,7 +20,7 @@
     beyond:{number:36,joined:'2025-01-19',views:6500},
     medi:{number:35,role:'training',joined:'2022-08-10',views:32100},
     people:{number:5,role:'pro',nickname:'people-skin',joined:'2025-06-09',views:2400},
-    lisboa:{number:37,joined:'2025-03-12',views:8200},
+    lisboa:{number:37,level:'premium',badgeVariant:'certificate',joined:'2025-03-12',views:8200},
     gulnur:{number:39,level:'doctor',joined:'2024-07-11',views:17400},
     anna:{number:101,level:'doctor',joined:'2025-05-14',views:9300},
     maria:{number:102,joined:'2024-01-09',views:22000},
@@ -96,6 +96,7 @@
     }
     if(!medical)return '';
     const premium=a.level==='premium',label=premium?'Премиум':'Врач';
+    if(premium && a.badgeVariant==='certificate')return `<span class="cm-account-badge cm-account-badge--certificate" role="img" title="Премиум" aria-label="Премиум"><img src="assets/account-premium-certificate.svg" width="24" height="24" alt=""></span>`;
     return `<span class="cm-account-badge ${premium?'cm-account-badge--premium':'cm-account-badge--doctor'}" role="img" title="${label}" aria-label="${label}">${medicine}</span>`;
   }
   function awardState(a, award) {

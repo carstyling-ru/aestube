@@ -3,6 +3,8 @@
 .cm-account-badge { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; gap: 3px; height: 24px; padding: 0 8px; border-radius: 30px; color: white; font: 700 11px/1.25 Inter, sans-serif; letter-spacing: .04em; white-space: nowrap; vertical-align: middle; }
 .cm-account-badge--training { background: #ad57a2; }
 .cm-account-badge--premium { width: 24px; padding: 0; border-radius: 50%; background: #2c5d9f; }
+.cm-account-badge--certificate { width: 24px; padding: 0; border-radius: 0; background: transparent; }
+.cm-account-badge--certificate > img { display: block; width: 24px; height: 24px; }
 .cm-account-badge--doctor { width: 24px; padding: 0; color: #2c5d9f; background: transparent; }
 .cm-medicine { display: block; width: 24px; height: 24px; flex: 0 0 24px; background: currentColor; -webkit-mask: url('account-medicine.svg') center / 24px 24px no-repeat; mask: url('account-medicine.svg') center / 24px 24px no-repeat; }
 .cm-account-badge:not(.cm-account-badge--doctor) .cm-medicine { width: 16px; height: 16px; flex-basis: 16px; -webkit-mask-size: 16px 16px; mask-size: 16px 16px; }
