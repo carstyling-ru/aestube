@@ -76,7 +76,7 @@ function shell() {
         <a class="header__logo" href="home.html"><img src="assets/logo.svg" alt="Aestube"></a>
         <label class="header__search">${icon('search')}<input type="search" placeholder="Поиск видео, авторов и плейлистов"></label>
         <div class="nt-header" data-notifications></div>
-        <a class="header__user" href="my-highlights.html" aria-label="Мой кабинет"><img class="avatar" src="assets/avatar.jpg" alt=""><span class="header__user-name">Делис</span><span class="pro-badge">PRO</span>${icon('chevron','header__profile-arrow')}</a>
+        <a class="header__user" href="my-highlights.html" aria-label="Мой кабинет"><img class="avatar" src="assets/avatar.jpg" alt=""><span class="header__user-name">Делис</span>${window.AestubeCommunity ? window.AestubeCommunity.badge(window.AestubeCommunity.currentAuthor()) : '<span class="pro-badge">PRO</span>'}${icon('chevron','header__profile-arrow')}</a>
         <div class="language" data-language>
           <button class="language__toggle" type="button" data-language-toggle aria-expanded="false" aria-haspopup="menu" aria-controls="header-language-menu"><span data-language-label>Русский</span>${icon('chevronDown')}</button>
           <div class="language__menu" id="header-language-menu" role="menu" aria-label="Выберите язык" data-language-menu hidden></div>
@@ -97,6 +97,7 @@ function shell() {
       </nav>`;
   });
 
+  document.querySelectorAll('[data-account-badge]').forEach(el => {el.innerHTML=window.AestubeCommunity?.badge({id:el.dataset.accountBadge}) || '';});
   document.querySelectorAll('[data-footer]').forEach(el => el.innerHTML = `<footer class="footer"><span>© 2026 Aestube</span><nav class="footer__links"><a href="#">О проекте</a><a href="#">Политика конфиденциальности</a><a href="#">Пользовательское соглашение</a><a href="#">Обратная связь</a></nav></footer>`);
 }
 

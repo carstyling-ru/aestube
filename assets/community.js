@@ -3,26 +3,24 @@
   const KEY = 'aestube-author-profiles-v1';
   const $ = selector => document.querySelector(selector);
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const TYPES = {
-    author:{label:'Зарегистрированный пользователь',short:'Пользователь',matches:a=>a.role==='registered' && a.level==='registered'},
-    doctor:{label:'Врач',short:'Врач',matches:a=>a.level==='doctor'},
-    premium:{label:'Премиум',short:'Премиум',matches:a=>a.level==='premium'},
-    pro:{label:'PRO',short:'PRO',matches:a=>a.role==='pro'},
-    training:{label:'Обучающий центр · EXPERT',short:'EXPERT',matches:a=>a.role==='training'}
+  const ROLES = {
+    doctor:{label:'Врач',short:'Врач'},
+    distributor:{label:'Дистрибьютер',short:'Дистрибьютер'},
+    training:{label:'Обучающий центр',short:'Обучающий центр'}
   };
   // Demonstration account metadata and award events; no production verification is performed.
   const meta = {
-    delis:{number:6,role:'pro',nickname:'delis',joined:'2021-06-11',views:148360},
-    davin:{number:42,role:'pro',level:'doctor',nickname:'dr-davin-lim',joined:'2023-04-17',views:48200},
-    energy:{number:30,role:'training',level:'doctor',joined:'2024-02-20',views:12600},
-    skin:{number:34,level:'premium',joined:'2024-05-08',views:24500},
-    diepenbrock:{number:38,level:'doctor',joined:'2021-03-15',views:108000},
+    delis:{number:6,role:'distributor',level:'pro',nickname:'delis',joined:'2021-06-11',views:148360},
+    davin:{number:42,role:'doctor',level:'pro',nickname:'dr-davin-lim',joined:'2023-04-17',views:48200},
+    energy:{number:30,role:'training',level:'premium',joined:'2024-02-20',views:12600},
+    skin:{number:34,role:'doctor',level:'premium',joined:'2024-05-08',views:24500},
+    diepenbrock:{number:38,role:'doctor',joined:'2021-03-15',views:108000},
     beyond:{number:36,joined:'2025-01-19',views:6500},
     medi:{number:35,role:'training',joined:'2022-08-10',views:32100},
-    people:{number:5,role:'pro',nickname:'people-skin',joined:'2025-06-09',views:2400},
-    lisboa:{number:37,level:'premium',badgeVariant:'certificate',joined:'2025-03-12',views:8200},
-    gulnur:{number:39,level:'doctor',joined:'2024-07-11',views:17400},
-    anna:{number:101,level:'doctor',joined:'2025-05-14',views:9300},
+    people:{number:5,level:'pro',nickname:'people-skin',joined:'2025-06-09',views:2400},
+    lisboa:{number:37,level:'premium',joined:'2025-03-12',views:8200},
+    gulnur:{number:39,role:'doctor',joined:'2024-07-11',views:17400},
+    anna:{number:101,role:'doctor',joined:'2025-05-14',views:9300},
     maria:{number:102,joined:'2024-01-09',views:22000},
     elena:{number:103,role:'training',joined:'2025-06-12',views:1400},
     irina:{number:104,joined:'2026-03-18',views:740},
@@ -56,7 +54,7 @@
   function enrich(a) {
     const data = meta[a.id] || {number:a.id,joined:'2025-01-01',views:0};
     const own = overrides[a.id] || {};
-    const role=data.role || 'registered',level=data.level || 'registered',pro=role==='pro';
+    const role=data.role || 'none',level=data.level || 'regular',pro=level==='pro';
     return {...a,...data,role,level,pro,nickname:pro ? own.nickname ?? data.nickname ?? '' : data.nickname || ''};
   }
   const currentAuthor = () => enrich(authors.find(a=>a.id==='delis') || {id:'delis',name:'Делис'});
@@ -87,17 +85,13 @@
   }
   function badge(a) {
     a=enrich(a);
-    const medical=a.level==='doctor' || a.level==='premium';
-    const medicine='<i class="cm-medicine" aria-hidden="true"></i>';
-    if(a.role==='pro' || a.role==='training'){
-      const training=a.role==='training',label=training?'EXPERT':'PRO';
-      const description=`${training?'Обучающий центр · EXPERT':'PRO'}${medical?' · '+(a.level==='premium'?'Премиум':'Врач'):''}`;
-      return `<span class="cm-account-badge ${training?'cm-account-badge--training':'pro-badge'}" role="img" title="${description}" aria-label="${description}">${medical?medicine:''}<span>${label}</span></span>`;
-    }
-    if(!medical)return '';
-    const premium=a.level==='premium',label=premium?'Премиум':'Врач';
-    if(premium && a.badgeVariant==='certificate')return `<span class="cm-account-badge cm-account-badge--certificate" role="img" title="Премиум" aria-label="Премиум"><img src="assets/account-premium-certificate.svg" width="24" height="24" alt=""></span>`;
-    return `<span class="cm-account-badge ${premium?'cm-account-badge--premium':'cm-account-badge--doctor'}" role="img" title="${label}" aria-label="${label}">${medicine}</span>`;
+    const role=ROLES[a.role],roleIcon=role?`<i class="cm-role-icon cm-role-icon--${a.role}" aria-hidden="true"></i>`:'';
+    const check='<svg class="cm-account-check" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 12 4 4 8-8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const level=a.level==='pro'?'PRO':a.level==='premium'?'Премиум':'';
+    const description=[level,role?.label].filter(Boolean).join(' · ');
+    if(a.level==='pro')return `<span class="cm-account-badge pro-badge" role="img" title="${description}" aria-label="${description}">${roleIcon}<span>PRO</span></span>`;
+    if(a.level==='premium')return `<span class="cm-account-badge cm-account-badge--premium" role="img" title="${description}" aria-label="${description}">${roleIcon || check}</span>`;
+    return role?`<span class="cm-account-badge cm-account-badge--role" role="img" title="${description}" aria-label="${description}">${roleIcon}</span>`:'';
   }
   function awardState(a, award) {
     a=enrich(a);let dates=[];
@@ -159,15 +153,15 @@
   }
   function initFilter(renderCards) {
     const host=$('[data-author-filter]');if(!host)return;
-    let selected=new Set((new URLSearchParams(location.search).get('types') || '').split(',').filter(key=>TYPES[key]));
-    host.innerHTML=`<div class="cm-filter-row"><details class="cm-type-filter"><summary><span>Роль и уровень:</span> <b data-type-filter-label>Все</b><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary><fieldset><legend class="cm-sr-only">Роль и уровень аккаунта</legend>${Object.entries(TYPES).map(([id,type])=>`<label><input type="checkbox" value="${id}" ${selected.has(id)?'checked':''}><span>${type.label}</span><b aria-hidden="true">${authors.map(enrich).filter(type.matches).length}</b></label>`).join('')}<button class="cm-filter-reset" type="button">Сбросить</button></fieldset></details></div>`;
+    let selected=new Set((new URLSearchParams(location.search).get('types') || '').split(',').filter(key=>ROLES[key]));
+    host.innerHTML=`<div class="cm-filter-row"><details class="cm-type-filter"><summary><span>Роль:</span> <b data-type-filter-label>Все</b><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary><fieldset><legend class="cm-sr-only">Роль автора</legend>${Object.entries(ROLES).map(([id,type])=>`<label><input type="checkbox" value="${id}" ${selected.has(id)?'checked':''}><span>${type.label}</span><b aria-hidden="true">${authors.map(enrich).filter(a=>a.role===id).length}</b></label>`).join('')}<button class="cm-filter-reset" type="button">Сбросить</button></fieldset></details></div>`;
     const meta=$('[data-author-filter-meta]');
     const detail=host.querySelector('details');
     function update() {
-      const list=authors.map(enrich).filter(a=>!selected.size || [...selected].some(id=>TYPES[id].matches(a)));renderCards(list);
-      host.querySelector('[data-type-filter-label]').textContent=!selected.size?'Все':selected.size===1?TYPES[[...selected][0]].short:`Выбрано: ${selected.size}`;
+      const list=authors.map(enrich).filter(a=>!selected.size || selected.has(a.role));renderCards(list);
+      host.querySelector('[data-type-filter-label]').textContent=!selected.size?'Все':selected.size===1?ROLES[[...selected][0]].short:`Выбрано: ${selected.size}`;
       meta.querySelector('[data-filter-count]').textContent=`Показано ${list.length} из ${authors.length}`;
-      meta.querySelector('[data-type-chips]').innerHTML=[...selected].map(id=>`<button type="button" data-remove-type="${id}">${TYPES[id].short}<span aria-hidden="true">×</span></button>`).join('');
+      meta.querySelector('[data-type-chips]').innerHTML=[...selected].map(id=>`<button type="button" data-remove-type="${id}">${ROLES[id].short}<span aria-hidden="true">×</span></button>`).join('');
       const url=new URL(location.href);if(selected.size)url.searchParams.set('types',[...selected].join(','));else url.searchParams.delete('types');history.replaceState(null,'',url);
     }
     host.querySelectorAll('input').forEach(input=>input.onchange=()=>{input.checked?selected.add(input.value):selected.delete(input.value);update();});
