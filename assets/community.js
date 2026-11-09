@@ -154,7 +154,7 @@
   function initFilter(renderCards) {
     const host=$('[data-author-filter]');if(!host)return;
     let selected=new Set((new URLSearchParams(location.search).get('types') || '').split(',').filter(key=>ROLES[key]));
-    host.innerHTML=`<div class="cm-filter-row"><details class="cm-type-filter"><summary><span>Роль:</span> <b data-type-filter-label>Все</b><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary><fieldset><legend class="cm-sr-only">Роль автора</legend>${Object.entries(ROLES).map(([id,type])=>`<label><input type="checkbox" value="${id}" ${selected.has(id)?'checked':''}><span>${type.label}</span><b aria-hidden="true">${authors.map(enrich).filter(a=>a.role===id).length}</b></label>`).join('')}<button class="cm-filter-reset" type="button">Сбросить</button></fieldset></details></div>`;
+    host.innerHTML=`<div class="cm-filter-row"><details class="cm-type-filter"><summary><span>Роль:</span> <b data-type-filter-label>Все</b><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary><fieldset><legend class="cm-sr-only">Роль автора</legend>${Object.entries(ROLES).map(([id,type])=>`<label><input type="checkbox" value="${id}" ${selected.has(id)?'checked':''}><span>${type.label}</span><span class="cm-filter-role-count" aria-hidden="true"><i class="cm-role-icon cm-role-icon--${id}"></i><b>${authors.map(enrich).filter(a=>a.role===id).length}</b></span></label>`).join('')}<button class="cm-filter-reset" type="button">Сбросить</button></fieldset></details></div>`;
     const meta=$('[data-author-filter-meta]');
     const detail=host.querySelector('details');
     function update() {

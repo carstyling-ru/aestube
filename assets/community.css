@@ -43,10 +43,13 @@ body.hl-popup-open { overflow: hidden; }
 .cm-type-filter summary .icon { width: 15px; height: 15px; margin-left: 6px; }
 .cm-type-filter[open] summary .icon { transform: rotate(180deg); }
 .cm-type-filter fieldset { position: absolute; z-index: 40; top: calc(100% + 8px); left: 0; width: min(380px, calc(100vw - 60px)); margin: 0; padding: 8px; border: 1px solid var(--soft-line); border-radius: 12px; background: white; box-shadow: 0 15px 40px #10233f20; }
-.cm-type-filter label { display: grid; grid-template-columns: 18px 1fr 24px; align-items: center; gap: 10px; padding: 12px 9px; border-radius: 7px; font-size: 13px; line-height: 1.5; cursor: pointer; }
+.cm-type-filter label { display: grid; grid-template-columns: 18px minmax(0,1fr) auto; align-items: center; gap: 10px; padding: 12px 9px; border-radius: 7px; font-size: 13px; line-height: 1.5; cursor: pointer; }
 .cm-type-filter label:hover { background: var(--canvas); }
 .cm-type-filter input { accent-color: var(--navy); width: 16px; height: 16px; margin: 0; }
 .cm-type-filter label b { color: var(--muted); font-weight: 400; text-align: right; }
+.cm-filter-role-count { display: inline-flex; align-items: center; gap: 8px; color: #2c5d9f; }
+.cm-filter-role-count .cm-role-icon { width: 16px; height: 16px; flex-basis: 16px; -webkit-mask-size: 16px 16px; mask-size: 16px 16px; }
+.cm-filter-role-count b { min-width: 20px; }
 .cm-filter-reset { display: block; width: 100%; padding: 11px; border: 0; border-top: 1px solid var(--soft-line); color: var(--blue); background: white; font-size: 12px; cursor: pointer; }
 .cm-filter-result { color: var(--muted); font-size: 12px; white-space: nowrap; }
 .cm-filter-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
