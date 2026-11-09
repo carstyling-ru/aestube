@@ -86,7 +86,7 @@
   function badge(a) {
     a=enrich(a);
     const role=ROLES[a.role],roleIcon=role?`<i class="cm-role-icon cm-role-icon--${a.role}" aria-hidden="true"></i>`:'';
-    const check='<svg class="cm-account-check" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 12 4 4 8-8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const check='<svg class="cm-account-check" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 12 4 4 8-8" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     const level=a.level==='pro'?'PRO':a.level==='premium'?'Премиум':'';
     const description=[level,role?.label].filter(Boolean).join(' · ');
     if(a.level==='pro')return `<span class="cm-account-badge pro-badge" role="img" title="${description}" aria-label="${description}">${roleIcon}<span>PRO</span></span>`;
