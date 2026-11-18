@@ -1,0 +1,12 @@
+.member-comment {
+  width: 190px;
+  max-width: none;
+  padding: 8px 10px;
+  border: 1px solid #dce2ea;
+  border-radius: 6px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+}
+.member-comment:focus { outline: 2px solid #2c5d9f; outline-offset: 1px; }
+.member-comment::placeholder { color: #8c98a7; }
