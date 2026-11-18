@@ -13,13 +13,13 @@
   const meta = {
     delis:{number:6,role:'distributor',level:'pro',nickname:'delis',joined:'2021-06-11',views:148360},
     davin:{number:42,role:'doctor',level:'pro',nickname:'dr-davin-lim',joined:'2023-04-17',views:48200},
-    energy:{number:30,role:'training',level:'premium',joined:'2024-02-20',views:12600},
-    skin:{number:34,role:'doctor',level:'premium',joined:'2024-05-08',views:24500},
+    energy:{number:30,role:'training',level:'plus',joined:'2024-02-20',views:12600},
+    skin:{number:34,role:'doctor',level:'plus',joined:'2024-05-08',views:24500},
     diepenbrock:{number:38,role:'doctor',joined:'2021-03-15',views:108000},
-    beyond:{number:36,joined:'2025-01-19',views:6500},
+    beyond:{number:36,role:'ambassador',level:'plus',joined:'2025-01-19',views:6500},
     medi:{number:35,role:'training',joined:'2022-08-10',views:32100},
     people:{number:5,level:'pro',nickname:'people-skin',joined:'2025-06-09',views:2400},
-    lisboa:{number:37,level:'premium',joined:'2025-03-12',views:8200},
+    lisboa:{number:37,level:'plus',joined:'2025-03-12',views:8200},
     gulnur:{number:39,role:'doctor',joined:'2024-07-11',views:17400},
     anna:{number:101,role:'doctor',joined:'2025-05-14',views:9300},
     maria:{number:102,joined:'2024-01-09',views:22000},
@@ -87,11 +87,10 @@
   function badge(a) {
     a=enrich(a);
     const role=ROLES[a.role],roleIcon=role?`<i class="cm-role-icon cm-role-icon--${a.role}" aria-hidden="true"></i>`:'';
-    const check='<svg class="cm-account-check" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 12 4 4 8-8" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    const level=a.level==='pro'?'PRO':a.level==='premium'?'Премиум':'';
+    const level=a.level==='pro'?'PRO':a.level==='plus'?'PLUS':'';
     const description=[level,role?.label].filter(Boolean).join(' · ');
     if(a.level==='pro')return `<span class="cm-account-badge pro-badge" role="img" title="${description}" aria-label="${description}">${roleIcon}<span>PRO</span></span>`;
-    if(a.level==='premium')return `<span class="cm-account-badge cm-account-badge--premium" role="img" title="${description}" aria-label="${description}">${roleIcon || check}</span>`;
+    if(a.level==='plus')return `<span class="cm-account-badge cm-account-badge--plus" role="img" title="${description}" aria-label="${description}">${roleIcon}<span>PLUS</span></span>`;
     return role?`<span class="cm-account-badge cm-account-badge--role" role="img" title="${description}" aria-label="${description}">${roleIcon}</span>`:'';
   }
   function awardState(a, award) {

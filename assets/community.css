@@ -1,16 +1,15 @@
 [hidden] { display: none !important; }
 .pro-badge { height: 24px; padding-top: 0; padding-bottom: 0; line-height: 1.25; flex-shrink: 0; }
 .cm-account-badge { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; gap: 3px; height: 24px; padding: 0 8px; border-radius: 30px; color: white; font: 700 11px/1.25 Inter, sans-serif; letter-spacing: .04em; white-space: nowrap; vertical-align: middle; }
-.cm-account-badge--premium { width: 24px; padding: 0; border-radius: 50%; background: #2c5d9f; }
-.cm-account-badge--role { width: 24px; padding: 0; color: #2c5d9f; background: transparent; }
+.cm-account-badge--plus { background: #2c5d9f; }
+.cm-account-badge--role { width: 24px; padding: 0; color: #2c5d9f; background: white; }
 .cm-role-icon { display: block; width: 24px; height: 24px; flex: 0 0 24px; background: currentColor; -webkit-mask: var(--account-role-icon) center / 24px 24px no-repeat; mask: var(--account-role-icon) center / 24px 24px no-repeat; }
 .cm-role-icon--doctor { --account-role-icon: url('account-medicine.svg'); }
 .cm-role-icon--distributor { --account-role-icon: url('account-distributor.svg?v=20261109-filled'); }
 .cm-role-icon--training { --account-role-icon: url('account-training.svg'); }
 .cm-role-icon--ambassador { --account-role-icon: url('account-ambassador.svg'); }
 .cm-account-badge:not(.cm-account-badge--role) .cm-role-icon { width: 16px; height: 16px; flex-basis: 16px; -webkit-mask-size: 16px 16px; mask-size: 16px 16px; }
-.cm-account-check { display: block; width: 16px; height: 16px; flex: 0 0 16px; }
-.cm-account-badge.pro-badge:has(.cm-role-icon) { padding-left: 4px; }
+.cm-account-badge.pro-badge:has(.cm-role-icon), .cm-account-badge--plus:has(.cm-role-icon) { padding-left: 4px; }
 .cm-name-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; min-width: 0; }
 .hl-author-card--horizontal .cm-name-row { justify-content: flex-start; }
 .author-profile__name { flex-wrap: wrap; }
