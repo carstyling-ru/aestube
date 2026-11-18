@@ -86,7 +86,17 @@
     return `<span class="hl-ring ${size} ${items.length ? authorSeen(a.id) ? 'is-seen' : '' : 'is-empty'}">${avatar(a)}</span>`;
   }
   const storyURL = (s, scope = 'single') => `highlight-view.html?author=${encodeURIComponent(s.author)}&story=${encodeURIComponent(s.id)}&scope=${scope}`;
-  const storyCover = s => `<span class="hl-short-cover"><img src="${esc(s.cover || s.src || 'assets/highlight-hair.jpg')}" alt="" loading="lazy"></span>`;
+  // Original Shorts covers from Dr Davin Lim, starting with “but what does Retinol DO?”.
+  // They apply only to built-in demo posts; user-uploaded covers remain unchanged.
+  const demoCoverIds = ['yN4qNkomEVk','jWEOIrCmMZY','PvAFJ-WVdW0','jpokU4SgtC4','SZgWL2emy9w','-r1SRm5RYVM','wlXjYhv9cLQ','zc1GsKCRJsw','OWoTY9aEf3c','brOf8EHwpqo','XG3MtzV1x_g','rkgqgfrpqvA'];
+  function demoCover(s) {
+    const index = authors.findIndex(a=>s.id===`${a.id}-1`);
+    if (index !== -1) return `assets/short-${demoCoverIds[index % demoCoverIds.length]}.jpg`;
+    if (s.id === 'delis-2') return `assets/short-${demoCoverIds[1]}.jpg`;
+    const archive = /^delis-archive-([0-4])$/.exec(s.id);
+    return archive ? `assets/short-${demoCoverIds[(Number(archive[1])+2) % demoCoverIds.length]}.jpg` : '';
+  }
+  const storyCover = s => `<span class="hl-short-cover"><img src="${esc(demoCover(s) || s.cover || s.src || 'assets/highlight-hair.jpg')}" alt="" loading="lazy"></span>`;
   const authorURL = a => community.profileURL(a);
   const viewURL = (a, scope = 'feed') => `highlight-view.html?author=${encodeURIComponent(a.id)}&scope=${scope}`;
   function feed() {
