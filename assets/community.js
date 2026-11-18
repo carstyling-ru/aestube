@@ -5,8 +5,9 @@
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const ROLES = {
     doctor:{label:'Врач',short:'Врач'},
+    training:{label:'Обучающий центр',short:'Обучающий центр'},
     distributor:{label:'Дистрибьютер',short:'Дистрибьютер'},
-    training:{label:'Обучающий центр',short:'Обучающий центр'}
+    ambassador:{label:'Амбассадор индустрии',short:'Амбассадор индустрии'}
   };
   // Demonstration account metadata and award events; no production verification is performed.
   const meta = {
@@ -25,7 +26,7 @@
     elena:{number:103,role:'training',joined:'2025-06-12',views:1400},
     irina:{number:104,joined:'2026-03-18',views:740},
     olga:{number:105,role:'training',joined:'2023-08-24',views:21000},
-    natalia:{number:106,joined:'2025-08-16',views:4600}
+    natalia:{number:106,role:'ambassador',joined:'2025-08-16',views:4600}
   };
   const monthly = {
     delis:[{month:'2026-05',rank:7,date:'2026-06-11'},{month:'2026-03',rank:6,date:'2026-04-11'},{month:'2025-09',rank:1,date:'2025-10-11'},{month:'2025-06',rank:19,date:'2025-07-11'}],

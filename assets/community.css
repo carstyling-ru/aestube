@@ -7,6 +7,7 @@
 .cm-role-icon--doctor { --account-role-icon: url('account-medicine.svg'); }
 .cm-role-icon--distributor { --account-role-icon: url('account-distributor.svg?v=20261109-filled'); }
 .cm-role-icon--training { --account-role-icon: url('account-training.svg'); }
+.cm-role-icon--ambassador { --account-role-icon: url('account-ambassador.svg'); }
 .cm-account-badge:not(.cm-account-badge--role) .cm-role-icon { width: 16px; height: 16px; flex-basis: 16px; -webkit-mask-size: 16px 16px; mask-size: 16px 16px; }
 .cm-account-check { display: block; width: 16px; height: 16px; flex: 0 0 16px; }
 .cm-account-badge.pro-badge:has(.cm-role-icon) { padding-left: 4px; }
