@@ -1,0 +1,24 @@
+.authors2-role {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #2c5d9f;
+  color: white;
+}
+.authors2-role .cm-role-icon {
+  width: 16px;
+  height: 16px;
+  flex-basis: 16px;
+  -webkit-mask-size: 16px 16px;
+  mask-size: 16px 16px;
+}
+.authors2-level {
+  color: #2c5d9f;
+  font: 700 11px/1.25 Inter, sans-serif;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
