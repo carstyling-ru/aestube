@@ -48,6 +48,19 @@
     for (let i = 0; i < 5; i++) state.stories.push({id:`delis-archive-${i}`,author:'delis',type:'photo',src:['assets/before.webp','assets/after.webp','assets/video-1.jpg','assets/video-2.jpg','assets/gallery-single.webp'][i],cover:['assets/before.webp','assets/after.webp','assets/video-1.jpg','assets/video-2.jpg','assets/gallery-single.webp'][i],title:['До процедуры','Результат через 14 дней','Обучение специалистов','Новый протокол','Восстановление кожи'][i],created:now - (48 + 24 * i) * HOUR,duration:7,pinned:i === 1,text:''});
     state.seen.push('olga-1','natalia-1');
   }
+  // Refresh only the original demonstration posts once per local day.
+  // User-created posts, deletions, pins, subscriptions and viewing state stay intact.
+  const now = new Date();
+  const demoDay = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  if (state.demoRefreshDate !== demoDay) {
+    const startOfDay = new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+    const elapsedToday = now.getTime() - startOfDay;
+    const demoIds = new Set(authors.map(a=>`${a.id}-1`).concat('delis-2'));
+    state.stories.filter(s=>demoIds.has(s.id)).forEach((s,i)=>{
+      s.created = Math.round(now.getTime() - Math.min(i * 12 * 60000, elapsedToday * .9));
+    });
+    state.demoRefreshDate = demoDay;
+  }
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(state)); return true; }
     catch (_) { showToast('Не удалось сохранить изменения. Проверьте доступность хранилища браузера.'); return false; }
@@ -73,6 +86,7 @@
     return `<span class="hl-ring ${size} ${items.length ? authorSeen(a.id) ? 'is-seen' : '' : 'is-empty'}">${avatar(a)}</span>`;
   }
   const storyURL = (s, scope = 'single') => `highlight-view.html?author=${encodeURIComponent(s.author)}&story=${encodeURIComponent(s.id)}&scope=${scope}`;
+  const storyCover = s => `<span class="hl-short-cover"><img src="${esc(s.cover || s.src || 'assets/highlight-hair.jpg')}" alt="" loading="lazy"></span>`;
   const authorURL = a => community.profileURL(a);
   const viewURL = (a, scope = 'feed') => `highlight-view.html?author=${encodeURIComponent(a.id)}&scope=${scope}`;
   function feed() {
@@ -81,7 +95,7 @@
     const sorted = [...authors].filter(a => allowedStories().some(s=>s.author === a.id)).sort((a,b) => Number(authorSeen(a.id)) - Number(authorSeen(b.id)) || Math.max(...storiesFor(b.id).map(s=>s.created)) - Math.max(...storiesFor(a.id).map(s=>s.created)));
     target.innerHTML = sorted.length ? sorted.map(a => {
       const items = storiesFor(a.id);
-      return `<a class="hl-avatar-item" href="${viewURL(a)}" aria-label="${esc(a.name)}: ${items.length} ${items.length === 1 ? 'публикация' : 'публикации'}, ${authorSeen(a.id) ? 'просмотрено' : 'не просмотрено'}">${ring(a)}<span class="hl-avatar-item__name">${esc(a.name)}</span>${document.body.dataset.highlightsPage === 'feed' ? `<span class="hl-avatar-item__meta">${items.length} ${items.length === 1 ? 'публикация' : 'публикации'} · ${age(items[0].created)}</span>` : ''}</a>`;
+      return `<a class="hl-short-item" href="${viewURL(a)}" aria-label="${esc(a.name)}: ${items.length} ${items.length === 1 ? 'публикация' : 'публикации'}, ${authorSeen(a.id) ? 'просмотрено' : 'не просмотрено'}">${storyCover(items[0])}<span class="hl-short-item__name">${esc(a.name)}</span>${document.body.dataset.highlightsPage === 'feed' ? `<span class="hl-short-item__meta">${items.length} ${items.length === 1 ? 'публикация' : 'публикации'} · ${age(items[0].created)}</span>` : ''}</a>`;
     }).join('') : '<p class="hl-empty">Пока нет актуальных публикаций. Посмотрите закреплённое в профилях авторов.</p>';
     document.querySelectorAll('[data-scroll]').forEach(button => button.onclick = () => target.scrollBy({left:Number(button.dataset.scroll) * target.clientWidth * .8,behavior:'smooth'}));
   }
@@ -131,7 +145,7 @@
     const pins = state.stories.filter(s=>s.author === id && s.pinned).sort((a,b)=>b.created-a.created);
     const section = target.closest('.hl-pinned-section');
     if (section) section.hidden = !pins.length;
-    target.innerHTML = pins.map(s => `<a class="hl-avatar-item" href="${storyURL(s,'pinned')}" aria-label="${esc(s.title)}"><span class="hl-ring is-empty"><img src="${esc(s.cover || s.src)}" alt=""></span><span class="hl-avatar-item__name">${esc(s.title)}</span></a>`).join('');
+    target.innerHTML = pins.map(s => `<a class="hl-short-item" href="${storyURL(s,'pinned')}" aria-label="${esc(s.title)}">${storyCover(s)}<span class="hl-short-item__name">${esc(s.title)}</span></a>`).join('');
   }
   function profile() {
     const a = community.fromURL();
@@ -157,7 +171,7 @@
     const current = own.filter(s=>Date.now()-s.created < state.period * HOUR);
     const archived = own;
     $('[data-my-period]').textContent = `${periodLabel()} после публикации`;
-    const card = s => `<article class="hl-manage-card"><a class="hl-avatar-item" href="${storyURL(s)}"><span class="hl-ring ${Date.now()-s.created >= state.period * HOUR ? 'is-empty' : isSeen(s) ? 'is-seen' : ''}"><img src="${esc(s.cover || s.src)}" alt="${esc(s.title)}"></span></a><span class="hl-manage-card__title">${esc(s.title)}</span><span class="hl-manage-card__time">${s.type === 'video' ? 'Видео' : 'Фото'} · ${s.duration} сек · ${age(s.created)}</span><span class="hl-manage-pin">${s.pinned ? 'Закреплено в профиле' : 'Не закреплено'}</span><div class="hl-manage-card__actions"><button class="button button--secondary button--small" data-pin="${s.id}">${s.pinned ? 'Открепить' : 'Закрепить'}</button><button class="button button--danger button--icon" data-delete="${s.id}" aria-label="Удалить ${esc(s.title)}">${icon('trash')}</button></div></article>`;
+    const card = s => `<article class="hl-manage-card"><a class="hl-short-item" href="${storyURL(s)}" aria-label="${esc(s.title)}">${storyCover(s)}</a><span class="hl-manage-card__title">${esc(s.title)}</span><span class="hl-manage-card__time">${s.type === 'video' ? 'Видео' : 'Фото'} · ${s.duration} сек · ${age(s.created)}</span><span class="hl-manage-pin">${s.pinned ? 'Закреплено в профиле' : 'Не закреплено'}</span><div class="hl-manage-card__actions"><button class="button button--secondary button--small" data-pin="${s.id}">${s.pinned ? 'Открепить' : 'Закрепить'}</button><button class="button button--danger button--icon" data-delete="${s.id}" aria-label="Удалить ${esc(s.title)}">${icon('trash')}</button></div></article>`;
     $('[data-my-active]').innerHTML = '<a class="hl-add" href="highlight-create.html"><span>+</span><span>Добавить</span></a>' + current.map(card).join('');
     $('[data-my-archive]').innerHTML = archived.map(card).join('') || '<p class="hl-empty">Архив пока пуст.</p>';
     $('[data-archive-count]').textContent = `(${archived.length})`;
