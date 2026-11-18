@@ -13,20 +13,20 @@
   const meta = {
     delis:{number:6,role:'distributor',level:'pro',nickname:'delis',joined:'2021-06-11',views:148360},
     davin:{number:42,role:'doctor',level:'pro',nickname:'dr-davin-lim',joined:'2023-04-17',views:48200},
-    energy:{number:30,role:'training',level:'plus',joined:'2024-02-20',views:12600},
-    skin:{number:34,role:'doctor',level:'plus',joined:'2024-05-08',views:24500},
-    diepenbrock:{number:38,role:'doctor',joined:'2021-03-15',views:108000},
+    energy:{number:30,level:'pro',joined:'2024-02-20',views:12600},
+    skin:{number:34,role:'training',level:'plus',joined:'2024-05-08',views:24500},
+    diepenbrock:{number:38,role:'doctor',level:'plus',joined:'2021-03-15',views:108000},
     beyond:{number:36,role:'ambassador',level:'plus',joined:'2025-01-19',views:6500},
-    medi:{number:35,role:'training',joined:'2022-08-10',views:32100},
-    people:{number:5,level:'pro',nickname:'people-skin',joined:'2025-06-09',views:2400},
-    lisboa:{number:37,level:'plus',joined:'2025-03-12',views:8200},
+    medi:{number:35,role:'distributor',level:'plus',joined:'2022-08-10',views:32100},
+    people:{number:5,level:'plus',nickname:'people-skin',joined:'2025-06-09',views:2400},
+    lisboa:{number:37,role:'training',joined:'2025-03-12',views:8200},
     gulnur:{number:39,role:'doctor',joined:'2024-07-11',views:17400},
-    anna:{number:101,role:'doctor',joined:'2025-05-14',views:9300},
-    maria:{number:102,joined:'2024-01-09',views:22000},
-    elena:{number:103,role:'training',joined:'2025-06-12',views:1400},
+    anna:{number:101,role:'ambassador',joined:'2025-05-14',views:9300},
+    maria:{number:102,role:'ambassador',level:'pro',joined:'2024-01-09',views:22000},
+    elena:{number:103,joined:'2025-06-12',views:1400},
     irina:{number:104,joined:'2026-03-18',views:740},
-    olga:{number:105,role:'training',joined:'2023-08-24',views:21000},
-    natalia:{number:106,role:'ambassador',joined:'2025-08-16',views:4600}
+    olga:{number:105,joined:'2023-08-24',views:21000},
+    natalia:{number:106,joined:'2025-08-16',views:4600}
   };
   const monthly = {
     delis:[{month:'2026-05',rank:7,date:'2026-06-11'},{month:'2026-03',rank:6,date:'2026-04-11'},{month:'2025-09',rank:1,date:'2025-10-11'},{month:'2025-06',rank:19,date:'2025-07-11'}],

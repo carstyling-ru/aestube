@@ -16,8 +16,8 @@
     {id:'people', name:'People & Skin', avatar:'assets/author-people.webp', about:'Профессиональная косметология и уход.', videos:2},
     {id:'lisboa', name:'Lisboa Beauty', avatar:'assets/author-lisboa.jpg', about:'Lisboa Beauty Service. Красота каждый день.', videos:7},
     {id:'gulnur', name:'Гульнур косметолог', initials:'ГК', about:'Врач дерматовенеролог, косметолог, к.м.н.', videos:16},
-    {id:'anna', name:'Анна Миронова', initials:'АМ', demo:true, about:'Инъекционная косметология и клинические разборы.', videos:18},
-    {id:'maria', name:'Мария Котова', initials:'МК', demo:true, about:'Пилинги и восстановительные протоколы.', videos:12},
+    {id:'anna', name:'Asteuro GROUP', avatar:'assets/author-asteuro.webp', avatarCrop:'asteuro', about:'Инъекционная косметология и клинические разборы.', videos:18},
+    {id:'maria', name:'Beauty Expert', avatar:'assets/author-beauty-expert.webp', avatarCrop:'beauty-expert', about:'Пилинги и восстановительные протоколы.', videos:12},
     {id:'elena', name:'Елена Волкова', initials:'ЕВ', demo:true, about:'Аппаратная косметология и уход.', videos:9},
     {id:'irina', name:'Ирина Белова', initials:'ИБ', demo:true, about:'Уход за кожей и профилактика возрастных изменений.', videos:14},
     {id:'olga', name:'Ольга Соколова', initials:'ОС', demo:true, about:'Эстетическая медицина и обучение.', videos:11},
@@ -65,6 +65,7 @@
     return `${Math.floor(hours / 24)} дн назад`;
   }
   function avatar(a) {
+    if (a.avatarCrop) return `<span class="hl-avatar-logo hl-avatar-logo--${esc(a.avatarCrop)}" role="img" aria-label="${esc(a.name)}"></span>`;
     return a.avatar ? `<img src="${esc(a.avatar)}" alt="${esc(a.name)}">` : `<span class="hl-avatar-initials" style="background:${['#e8e4f3','#e3edf3','#f2e3ea'][authors.indexOf(a)%3]}">${esc(a.initials)}</span>`;
   }
   function ring(a, size = '') {
@@ -100,7 +101,7 @@
   }
   function authorCard(a) {
     const subscribed = state.subscriptions.includes(a.id);
-    return `<article class="hl-author-card"><a class="hl-profile-link" href="${storiesFor(a.id).length ? viewURL(a,'author') : authorURL(a)}" aria-label="${esc(a.name)}${storiesFor(a.id).length ? ' — смотреть актуальное' : ''}">${ring(a,'hl-ring--large')}</a><div class="cm-name-row"><a class="hl-author-card__name" href="${authorURL(a)}">${esc(a.name)}</a>${community.badge(a)}</div><span class="hl-author-card__stats">${a.id === 'delis' ? 6 : 1} подписано · ${a.videos} видео</span><p class="hl-author-card__about">${esc(a.about)}</p>${a.demo ? '<span class="hl-author-card__note">Автор-пример</span>' : ''}<button class="button button--secondary button--small" data-subscribe="${a.id}">${subscribed ? 'Отписаться' : 'Подписаться'}</button></article>`;
+    return `<article class="hl-author-card"><a class="hl-profile-link" href="${storiesFor(a.id).length ? viewURL(a,'author') : authorURL(a)}" aria-label="${esc(a.name)}${storiesFor(a.id).length ? ' — смотреть актуальное' : ''}">${ring(a,'hl-ring--large')}</a><div class="cm-name-row"><a class="hl-author-card__name" href="${authorURL(a)}">${esc(a.name)}</a>${community.badge(a)}</div><span class="hl-author-card__stats">${a.id === 'delis' ? 6 : 1} подписано · ${a.videos} видео</span><p class="hl-author-card__about">${esc(a.about)}</p><button class="button button--secondary button--small" data-subscribe="${a.id}">${subscribed ? 'Отписаться' : 'Подписаться'}</button></article>`;
   }
   function homeAuthorCard(a, index) {
     const hasHighlights = (index === 1 || index === 2) && storiesFor(a.id).length > 0;
