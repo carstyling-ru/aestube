@@ -5,6 +5,7 @@
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const ROLES = {
     doctor:{label:'Врач',short:'Врач'},
+    clinic:{label:'Клиника',short:'Клиника'},
     training:{label:'Обучающий центр',short:'Обучающий центр'},
     distributor:{label:'Дистрибьютер',short:'Дистрибьютер'},
     ambassador:{label:'Амбассадор индустрии',short:'Амбассадор индустрии'}

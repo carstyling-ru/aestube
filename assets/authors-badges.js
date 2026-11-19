@@ -1,8 +1,10 @@
 (() => {
   'use strict';
+  // Alternative author-list presentation: role and level are independent.
   const community = window.AestubeCommunity;
   const roleLabels = {
     doctor: 'Врач',
+    clinic: 'Клиника',
     training: 'Обучающий центр',
     distributor: 'Дистрибьютер',
     ambassador: 'Амбассадор индустрии'
